@@ -10,6 +10,14 @@ use Illuminate\View\View;
 class ProjectController extends Controller
 {
     /**
+     * Create the controller instance.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Project::class, 'project');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request): View
@@ -49,9 +57,11 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show(Project $project) : View
     {
-        //
+        return view("projects.show", [
+            "project" => $project
+        ]);
     }
 
     /**
