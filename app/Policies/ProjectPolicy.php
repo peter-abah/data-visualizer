@@ -19,9 +19,9 @@ class ProjectPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user, Project $project): bool
+    public function viewAny(User $user): bool
     {
-        return $this->checkOwnerShip($user, $project);
+        return true;
     }
 
     /**
@@ -35,9 +35,9 @@ class ProjectPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, Project $project): bool
+    public function create(User $user): bool
     {
-        return $this->checkOwnerShip($user, $project);
+        return true;
     }
 
     /**
