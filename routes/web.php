@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,7 @@ Route::redirect('/', '/dashboard');
 Route::resource("projects", ProjectController::class)->except([
     "index"
 ])->middleware(["auth"]);
+Route::resource("projects.charts", ChartController::class)->shallow()->scoped();;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

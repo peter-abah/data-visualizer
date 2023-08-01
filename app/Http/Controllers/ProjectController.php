@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\CSVFile;
+use App\Helpers\Helpers;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -22,8 +25,8 @@ class ProjectController extends Controller
      */
     public function index(Request $request): View
     {
-        return view("dashboard", [
-            "projects" => $request->user()->projects
+        return view('dashboard', [
+            'projects' => $request->user()->projects
         ]);
     }
 
@@ -32,7 +35,7 @@ class ProjectController extends Controller
      */
     public function create(): View
     {
-        return view("projects.create");
+        return view('projects.create');
     }
 
     /**
@@ -41,26 +44,30 @@ class ProjectController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            "name" => 'required|max:255',
-            "file" => "required|mimes:csv,txt|max:1024"
+            'name' => 'required|max:255',
+            'file' => 'required|mimes:csv,txt|max:1024'
         ]);
 
-        $file_path = $request->file("file")->store("project_files");
+        Helpers::removeBOMFromUploadedFile($request->file('file'));
+
+        $columns = (new CSVFile($request->file('file')->getRealPath()))->getKeys();
+        $file_path = $request->file('file')->store('project_files');
 
         $project = new Project($validated);
         $project->file_path = $file_path;
+        $project->columns = $columns;
         $request->user()->projects()->save($project);
 
-        return redirect(route("dashboard"));
+        return redirect(route('dashboard'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Project $project) : View
+    public function show(Project $project): View
     {
-        return view("projects.show", [
-            "project" => $project
+        return view('projects.show', [
+            'project' => $project
         ]);
     }
 

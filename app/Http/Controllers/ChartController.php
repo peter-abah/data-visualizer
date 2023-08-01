@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ChartType;
+use App\Http\Requests\StoreChartRequest;
 use App\Models\Chart;
+use App\Models\Project;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ChartController extends Controller
 {
@@ -18,17 +23,39 @@ class ChartController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request, Project $project): View
     {
-        //
+        $chartType = $request->input('type') ?? ChartType::LineChart;
+        switch ($chartType) {
+            case ChartType::LineChart:
+            default:
+                return view('charts.create.line_chart', [
+                    'project' => $project,
+                    'columns' => $project->columns,
+                    'chartType' => $chartType,
+                ]);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreChartRequest $request, Project $project): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        $chart = new Chart([...$validated, 'project_id' => $project->id]);
+
+        $chartData = $chart->createChartData(
+            $project,
+            $validated['data-column'],
+            $validated['x-axis-column']
+        );
+        $chart->data = $chartData;
+
+        $request->user()->save($chart);
+
+        return redirect(route('charts.show'));
     }
 
     /**
