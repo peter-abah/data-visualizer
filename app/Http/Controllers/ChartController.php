@@ -55,6 +55,11 @@ class ChartController extends Controller
         );
         $chart->data = $chartData;
 
+        $chart->config = [
+            'dataColumn' => $validated['data-column'],
+            'xAxisColumn' => $validated['x-axis-column']
+        ];
+
         $request->user()->charts()->save($chart);
 
         return redirect(route('charts.show', ['chart' => $chart]));

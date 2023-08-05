@@ -15,6 +15,7 @@ class Chart extends Model
 
     protected $casts = [
         'data' => 'array',
+        'config' => 'array',
         'type' => ChartType::class,
     ];
 
@@ -36,12 +37,18 @@ class Chart extends Model
         $data = [];
 
         foreach ($csvFile as $row) {
-            array_push($data, [
-                'dataColumn' => $row[$dataColumn],
-                'xAxisColumn' => $row[$xAxisColumn]
-            ]);
+            $key = $row["$xAxisColumn"];
+
+            if (isset($data[$key])) {
+                $data[$key]["$dataColumn"] += (float) $row[$dataColumn];
+            } else {
+                $data[$key] = [
+                    "$dataColumn" => $row[$dataColumn],
+                    "$xAxisColumn" => $row[$xAxisColumn]
+                ];
+            }
         }
 
-        return $data;
+        return array_values($data);
     }
 }
