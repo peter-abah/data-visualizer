@@ -9,6 +9,7 @@ use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Inertia\Inertia;
 
 class ChartController extends Controller
 {
@@ -44,18 +45,19 @@ class ChartController extends Controller
     {
         $validated = $request->validated();
 
-        $chart = new Chart([...$validated, 'project_id' => $project->id]);
+        $chart = new Chart($validated);
+        $chart->project()->associate($project);
 
-        $chartData = $chart->createChartData(
+        $chartData = $chart->createData(
             $project,
             $validated['data-column'],
             $validated['x-axis-column']
         );
         $chart->data = $chartData;
 
-        $request->user()->save($chart);
+        $request->user()->charts()->save($chart);
 
-        return redirect(route('charts.show'));
+        return redirect(route('charts.show', ['chart' => $chart]));
     }
 
     /**
@@ -63,7 +65,9 @@ class ChartController extends Controller
      */
     public function show(Chart $chart)
     {
-        //
+        return Inertia::render('Chart', [
+            'chart' => $chart
+          ]);
     }
 
     /**
