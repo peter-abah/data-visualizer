@@ -27,15 +27,12 @@ class ChartController extends Controller
     public function create(Request $request, Project $project): View
     {
         $chartType = $request->input('type') ?? ChartType::LineChart;
-        switch ($chartType) {
-            case ChartType::LineChart:
-            default:
-                return view('charts.create.line_chart', [
-                    'project' => $project,
-                    'columns' => $project->columns,
-                    'chartType' => $chartType,
-                ]);
-        }
+
+        return view("charts.create.$chartType", [
+            'project' => $project,
+            'columns' => $project->columns,
+            'chartType' => $chartType,
+        ]);
     }
 
     /**
@@ -72,7 +69,7 @@ class ChartController extends Controller
     {
         return Inertia::render('Chart', [
             'chart' => $chart
-          ]);
+        ]);
     }
 
     /**

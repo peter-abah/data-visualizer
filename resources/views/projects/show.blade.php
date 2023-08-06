@@ -1,26 +1,12 @@
 <x-app-layout>
-    <header class="pb-4 mb-6 border-b">
+    <header class="pb-4 mb-6">
         <div class="flex items-center">
             <h1 class="font-bold tracking-tight text-3xl text-gray-800 dark:text-gray-200">
                 {{ $project->name }}
             </h1>
 
             <div class="ml-auto flex gap-4 justify-end">
-                <x-dropdown>
-                    <x-slot name="trigger">
-                        <button class=" px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50">
-                            {{ __('Create chart') }}
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link
-                            :href="route('projects.charts.create', ['project' => $project->id, 'type' => 'line_chart'])"
-                        >
-                            {{ __('Line chart') }}
-                        </x-dropdown-link>
-                    </x-slot>
-                </x-dropdown>
+                <x-create-chart-btn :project="$project" />
 
                 <a href={{ route('projects.edit', $project) }}
                     class="px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50">
@@ -42,14 +28,26 @@
 
 
     <div>
-        <h2 class="text-2xl font-bold mb-4">Charts</h2>
+        <h2 class="text-2xl font-bold mb-4 sr-only">Charts</h2>
 
-        <div class="flex flex-col w-fit mx-auto items-center mt-8">
-            <p class="text-xl md:text-3xl mb-4">No charts created yet!</p>
-            <a href="#" class="w-fit px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50">
-                Create a chart
-            </a>
-        </div>
+        @if (count($project->charts) === 0)
+            <div class="flex flex-col w-fit mx-auto items-center mt-16">
+                <p class="text-xl md:text-3xl mb-4">No charts created yet!</p>
+                <x-create-chart-btn :project="$project" />
 
+            </div>
+        @else
+            <div class="flex flex-col">
+                @foreach ($project->charts as $chart)
+                    <a href="{{ route('charts.show', ['chart' => $chart]) }}"
+                        class="border-b last:border-none hover:underline">
+                        <div class="py-4 flex items-center">
+                            <h2 class="text-lg font-bold">{{ $chart->name }}</h2>
+                            <p class="ml-10 truncate text-sm">({{ $chart->type }})</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        @endif
     </div>
 </x-app-layout>

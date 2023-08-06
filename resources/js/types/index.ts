@@ -1,10 +1,11 @@
-export enum ChartType {
+export enum ChartTypeEnum {
     Line = "line_chart",
+    Bar = "bar_chart",
 }
 
 export type Chart = {
     name: string;
     data: Record<string, string>[];
-    type: ChartType;
+    type: ChartTypeEnum;
     config: any;
 };
