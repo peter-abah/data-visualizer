@@ -45,7 +45,8 @@ class ProjectController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|max:255',
-            'file' => 'required|mimes:csv,txt|max:1024'
+            'file' => 'required|mimes:csv,txt|max:1024',
+            'description' => 'string'
         ]);
 
         Helpers::removeBOMFromUploadedFile($request->file('file'));
