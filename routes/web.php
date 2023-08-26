@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Charts\CreateLineChart;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -22,7 +23,8 @@ Route::redirect('/', '/dashboard');
 Route::resource("projects", ProjectController::class)->except([
     "index"
 ])->middleware(["auth"]);
-Route::resource("projects.charts", ChartController::class)->shallow()->scoped();;
+Route::resource("projects.charts", ChartController::class)->shallow()->scoped();
+Route::get("/projects/{project}/charts/create-line-chart", CreateLineChart::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
