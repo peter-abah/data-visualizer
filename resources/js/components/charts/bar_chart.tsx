@@ -33,14 +33,12 @@ export default function BarChart({ chart }: Props) {
                         labels: chart.data.map(
                             (row) => row[config.xAxisColumn]
                         ),
-                        datasets: [
-                            {
-                                label: config.dataColumn,
-                                data: data.map((row) => row[config.dataColumn]),
-                                backgroundColor: "#4568FF",
-                                borderColor: "#4568FF",
-                            },
-                        ],
+                        datasets: config.dataColumns.map((dataColumn) => ({
+                            label: dataColumn,
+                            data: data.map((row) => row[dataColumn]),
+                            backgroundColor: "#4568FF",
+                            borderColor: "#4568FF",
+                        })),
                     }}
                 />
             </div>

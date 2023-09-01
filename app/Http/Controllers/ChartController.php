@@ -30,9 +30,7 @@ class ChartController extends Controller
 
         return view("charts.create.$chartType", [
             'project' => $project,
-            'columns' => $project->columns,
             'chartType' => $chartType,
-            'dataColumnsNo' => 1,
         ]);
     }
 
