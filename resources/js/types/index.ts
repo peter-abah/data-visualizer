@@ -7,5 +7,8 @@ export type Chart = {
     name: string;
     data: Record<string, string>[];
     type: ChartTypeEnum;
-    config: any;
+    config: {
+        dataColumns: string[],
+        xAxisColumn: string,
+    };
 };

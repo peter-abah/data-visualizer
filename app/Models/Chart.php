@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ChartType;
 use App\Helpers\CSVFile;
+use App\Helpers\Helpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,21 +32,23 @@ class Chart extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function createData(Project $project, $dataColumn, $xAxisColumn)
+    public function createData(Project $project, $dataColumns, $xAxisColumn)
     {
         $csvFile = new CSVFile(Storage::path($project->file_path));
         $data = [];
 
         foreach ($csvFile as $row) {
             $key = $row["$xAxisColumn"];
+            $dataColumnsRow = Helpers::extractKeysFromArray($row, $dataColumns);
 
             if (isset($data[$key])) {
-                $data[$key]["$dataColumn"] += (float) $row[$dataColumn];
+                foreach ($dataColumnsRow as $column => $value) {
+                    $data[$key][$column] = $value;
+                }
             } else {
-                $data[$key] = [
-                    "$dataColumn" => $row[$dataColumn],
+                $data[$key] = array_merge([
                     "$xAxisColumn" => $row[$xAxisColumn]
-                ];
+                ], $dataColumnsRow);
             }
         }
 

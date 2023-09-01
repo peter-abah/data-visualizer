@@ -26,4 +26,16 @@ class Helpers
         $fileObj = $file->openFile("w");
         $fileObj->fwrite($contents);
     }
+
+    public static function extractKeysFromArray(array $array, array $keysToExtract) {
+        $extractedArray = [];
+
+        foreach ($keysToExtract as $key) {
+            if (isset($array[$key])) {
+                $extractedArray[$key] = $array[$key];
+            }
+        }
+
+        return $extractedArray;
+    }
 }

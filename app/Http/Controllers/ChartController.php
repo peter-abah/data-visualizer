@@ -32,6 +32,7 @@ class ChartController extends Controller
             'project' => $project,
             'columns' => $project->columns,
             'chartType' => $chartType,
+            'dataColumnsNo' => 1,
         ]);
     }
 
@@ -47,13 +48,13 @@ class ChartController extends Controller
 
         $chartData = $chart->createData(
             $project,
-            $validated['data-column'],
+            $validated['data-columns'],
             $validated['x-axis-column']
         );
         $chart->data = $chartData;
 
         $chart->config = [
-            'dataColumn' => $validated['data-column'],
+            'dataColumns' => $validated['data-columns'],
             'xAxisColumn' => $validated['x-axis-column']
         ];
 

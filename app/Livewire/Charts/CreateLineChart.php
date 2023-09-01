@@ -6,10 +6,10 @@ use App\Enums\ChartType;
 use App\Helpers\CSVFile;
 use App\Models\Chart;
 use App\Models\Project;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -23,8 +23,17 @@ class CreateLineChart extends Component
     #[Rule('required|max:255', as: 'X axis column', onUpdate: false)]
     public string $xAxisColumn = '';
 
-    #[Rule('required|max:255', as: 'Data column', onUpdate: false)]
-    public string $dataColumn = '';
+    #[Rule('required|array|min:1', as: 'Data column', onUpdate: false)]
+    public array $dataColumns = [];
+
+    public int $dataColumnsNo = 1;
+
+    protected function rules()
+    {
+        return [
+            'dataColumns.*' => 'required|string|max:255'
+        ];
+    }
 
     public function boot()
     {
@@ -32,13 +41,20 @@ class CreateLineChart extends Component
             $validator->after([
                 // Validate field exist in data
                 function (Validator $validator) {
-                    $column_fields = ['xAxisColumn', 'dataColumn'];
+                    // Check X axis column
+                    if (!$this->isColumnInProject($this->xAxisColumn)) {
+                        $validator->errors()->add(
+                            'xAxisColumn',
+                            "$this->xAxisColumn doesn't exist in project data"
+                        );
+                    }
 
-                    foreach ($column_fields as $field) {
-                        if (!$this->isColumnInProject($field)) {
+                    // Check data columns
+                    foreach ($this->dataColumns as $column) {
+                        if (!$this->isColumnInProject($column)) {
                             $validator->errors()->add(
-                                $field,
-                                "$field doesn't exist in project data"
+                                'dataColumns',
+                                "$column doesn't exist in project data"
                             );
                         }
                     }
@@ -46,18 +62,18 @@ class CreateLineChart extends Component
 
                 // Validate data field is numeric
                 function (Validator $validator) {
-                    if (!$this->isColumnInProject('dataColumn')) {
-                        return;
-                    }
-
                     $csvFile = new CSVFile(Storage::path($this->project->file_path));
 
                     foreach ($csvFile as $row) {
-                        if (!is_numeric($row[$this->dataColumn])) {
-                            $validator->errors()->add(
-                                'dataColumn',
-                                'Data column is not numeric'
-                            );
+                        foreach ($this->dataColumns as $column) {
+                            if (!$this->isColumnInProject($column)) continue;
+
+                            if (!is_numeric($row[$column])) {
+                                $validator->errors()->add(
+                                    'dataColumns',
+                                    "Data column ($column) is not numeric"
+                                );
+                            }
                         }
                     }
                 }
@@ -76,9 +92,11 @@ class CreateLineChart extends Component
         return view('livewire.charts.create-line-chart');
     }
 
-    public function save()
+    public function save(Request $request)
     {
+        dd($this->all());
         $validated = $this->validate();
+        dd($validated);
         $chart = new Chart($validated);
         $chart->type = ChartType::LineChart;
 
@@ -101,9 +119,9 @@ class CreateLineChart extends Component
         return redirect(route('charts.show', ['chart' => $chart]));
     }
 
-    private function isColumnInProject(string $field): bool
+    private function isColumnInProject(string $column): bool
     {
 
-        return in_array($this->getPropertyValue($field), $this->project->columns);
+        return in_array($column, $this->project->columns);
     }
 }

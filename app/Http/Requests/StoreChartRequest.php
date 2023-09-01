@@ -27,7 +27,8 @@ class StoreChartRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'x-axis-column' => 'required|max:255',
-            'data-column' => 'required|max:255',
+            'data-columns' => 'array|required|min:1|max:3',
+            'data-columns.*' => 'required|string|max:255',
             'type' => 'required'
         ];
     }
@@ -37,41 +38,51 @@ class StoreChartRequest extends FormRequest
         return [
             // Validate column fields exist in project
             function (Validator $validator) {
-                $column_fields = ['x-axis-column', 'data-column'];
+                // Validate X axis column in column
+                $xAxisColumn = $this->input('x-axis-column');
 
-                foreach ($column_fields as $field) {
-                    if (!$this->isColumnInProject($field)) {
+                if (!$this->isColumnInProject($xAxisColumn)) {
+                    $validator->errors()->add(
+                        'x-axis-column',
+                        "$xAxisColumn doesn't exist in project data"
+                    );
+                }
+
+                // Validate data column
+                $dataColumns = $this->input('data-columns');
+
+                foreach ($dataColumns as $column) {
+                    if (!$this->isColumnInProject($column)) {
                         $validator->errors()->add(
-                            $field,
-                            "$field doesn't exist in project data"
+                            'data-columns',
+                            "Data column ($column) doesn't exist in project data"
                         );
                     }
                 }
             },
 
             // Validate data field is numeric
-            function (Validator $validator) {
-                if (!$this->isColumnInProject('data-column')) {
-                    return;
-                }
+            function (Validator $validator)  {
+                $dataColumns = $this->input('data-columns');
+                if (!$dataColumns) return;
 
                 $csvFile = new CSVFile(Storage::path($this->project->file_path));
-                $dataColumn = $this->input('data-column');
-
                 foreach ($csvFile as $row) {
-                    if (!is_numeric($row[$dataColumn])) {
-                        $validator->errors()->add(
-                            'data-column',
-                            'data-column is not numeric'
-                        );
+                    foreach ($dataColumns as $column) {
+                        if (!is_numeric($row[$column])) {
+                            $validator->errors()->add(
+                                'data-columns',
+                                "Data column ($column) is not numeric"
+                            );
+                        }
                     }
                 }
             }
         ];
     }
 
-    private function isColumnInProject(string $columnAttribute): bool
+    private function isColumnInProject(string $column): bool
     {
-        return in_array($this->input($columnAttribute), $this->project->columns);
+        return in_array($column, $this->project->columns);
     }
 }

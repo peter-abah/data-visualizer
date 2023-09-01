@@ -23,7 +23,60 @@
             <x-input-error :messages="$errors->get('xAxisColumn')" />
         </div>
 
-        <div class="mt-4">
+        <ul x-data="{ columnsNo: {{ $dataColumnsNo }} }">
+            @for ($i = 0; $i < $dataColumnsNo; $i++)
+                <li class="mt-4">
+                    <x-input-label for="data-column{{ $i }}" :value="__('Data Column ' . ($i + 1) . ' (Ensure it is numeric)*')" />
+                    <select id="data-column{{ $i }}" wire:model="dataColumns.{{ $i }}" required>
+                        <option value="">{{ __('--Select an option--') }}</option>
+                        @foreach ($project->columns as $column)
+                            <option value="{{ $column }}">
+                                {{ $column }}</option>
+                        @endforeach
+                    </select>
+                </li>
+            @endfor
+
+            <template x-for="i in (columnsNo - {{ $dataColumnsNo }})">
+                <li class="mt-4">
+                    <x-input-label x-bind:for="`data-column${i + {{ $dataColumnsNo }}}`"
+                        x-text="`Data Column ${i + {{ $dataColumnsNo }}} (Ensure it is numeric)*`" />
+                    <select x-bind:id="`data-column${i + {{ $dataColumnsNo }}}`" x-bind:name="`data-columns.*.${i - 1}`"
+                        required>
+                        <option value="">{{ __('--Select an option--') }}</option>
+                        @foreach ($project->columns as $column)
+                            <option value="{{ $column }}">
+                                {{ $column }}</option>
+                        @endforeach
+                    </select>
+                </li>
+            </template>
+
+            <x-primary-button type="button" class="mt-2"
+                @click="columnsNo++">{{ __('Add more lines') }}</x-primary-button>
+            <x-input-error :messages="$errors->get('dataColumns')" />
+        </ul>
+
+
+        {{-- <ul x-data="{ columnsNo: {{ $dataColumnsNo }} }">
+            <template x-for="i in columnsNo">
+                <li class="mt-4">
+                    <x-input-label x-bind:for="`data-column${i}`" :value="__('Data Column (Ensure it is numeric)*')" />
+                    <select x-bind:id="`data-column${i}`" wire:model="dataColumn" required>
+                        <option value="">{{ __('--Select an option--') }}</option>
+                        @foreach ($project->columns as $column)
+                            <option value="{{ $column }}"
+                                {{ $column === old('data-column') ? 'selected' : '' }}>
+                                {{ $column }}</option>
+                        @endforeach
+                    </select>
+
+                    <x-input-error :messages="$errors->get('dataColumn')" />
+                </li>
+            </template>
+        </ul> --}}
+
+        {{-- <div class="mt-4">
             <x-input-label for="data-column" :value="__('Data Column (Ensure it is numeric)*')" />
             <select id="data-column" wire:model="dataColumn" required>
                 <option value="">{{ __('--Select an option--') }}</option>
@@ -34,7 +87,7 @@
             </select>
 
             <x-input-error :messages="$errors->get('dataColumn')" />
-        </div>
+        </div> --}}
 
         <div class="flex items-center justify-end mt-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
