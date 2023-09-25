@@ -8,6 +8,7 @@ use App\Helpers\Helpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class Chart extends Model
@@ -32,22 +33,23 @@ class Chart extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function createData(Project $project, $dataColumns, $xAxisColumn)
+    public function createData(Project $project, array $dataColumns, string $xAxisColumn)
     {
         $csvFile = new CSVFile(Storage::path($project->file_path));
         $data = [];
 
         foreach ($csvFile as $row) {
+            $row = mb_convert_encoding($row, 'UTF-8', 'UTF-8');
             $key = $row["$xAxisColumn"];
             $dataColumnsRow = Helpers::extractKeysFromArray($row, $dataColumns);
 
             if (isset($data[$key])) {
                 foreach ($dataColumnsRow as $column => $value) {
-                    $data[$key][$column] = $value;
+                    $data[$key][$column] += $value;
                 }
             } else {
                 $data[$key] = array_merge([
-                    "$xAxisColumn" => $row[$xAxisColumn]
+                    "$xAxisColumn" => $key
                 ], $dataColumnsRow);
             }
         }
