@@ -9,7 +9,10 @@ import {
     Title,
     Tooltip,
     Legend,
+    scales,
 } from "chart.js";
+
+import { COLORS, getDefaultConfigToRenderChart } from "../../lib/constants";
 
 ChartJS.register(
     CategoryScale,
@@ -29,19 +32,20 @@ export default function LineChart({ chart }: Props) {
 
     return (
         <>
-            <div className="max-w-screen-lg mx-auto">
+            <div className="sm:mx-6 lg:mx-auto max-w-5xl min-h-[25rem]">
                 <Line
                     data={{
                         labels: chart.data.map(
                             (row) => row[config.xAxisColumn]
                         ),
-                        datasets: config.dataColumns.map((dataColumn) => ({
+                        datasets: config.dataColumns.map((dataColumn, i) => ({
                             label: dataColumn,
                             data: data.map((row) => row[dataColumn]),
-                            backgroundColor: "#4568FF",
-                            borderColor: "#4568FF",
+                            backgroundColor: COLORS[i],
+                            borderColor: COLORS[i],
                         })),
                     }}
+                    {...getDefaultConfigToRenderChart(chart)}
                 />
             </div>
         </>
