@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
 use SplFileObject;
 
 class CSVFile extends SplFileObject

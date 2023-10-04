@@ -9,5 +9,3 @@ import {
 Livewire.start();
 
 window.Alpine = Alpine;
-
-Alpine.start();

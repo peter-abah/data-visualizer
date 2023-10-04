@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ChartType;
+use App\Helpers\Helpers;
 use App\Http\Requests\StoreChartRequest;
 use App\Models\Chart;
 use App\Models\Project;
@@ -43,18 +44,8 @@ class ChartController extends Controller
 
         $chart = new Chart($validated);
         $chart->project()->associate($project);
-
-        $chartData = $chart->createData(
-            $project,
-            $validated['data-columns'],
-            $validated['x-axis-column']
-        );
-        $chart->data = $chartData;
-
-        $chart->config = [
-            'dataColumns' => $validated['data-columns'],
-            'xAxisColumn' => $validated['x-axis-column']
-        ];
+        $chart->config = $chart->createConfig($validated);
+        $chart->data = $chart->createData();
 
         $request->user()->charts()->save($chart);
 

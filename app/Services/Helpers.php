@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
 
@@ -27,10 +27,11 @@ class Helpers
         $fileObj->fwrite($contents);
     }
 
-    public static function extractKeysFromArray(array $array, array $keysToExtract) {
+    // Filters keys and values in $array from $keysToFilter and returns a new array with the filtered keys
+    public static function filterKeysInArray(array $array, array $keysToFilter) {
         $extractedArray = [];
 
-        foreach ($keysToExtract as $key) {
+        foreach ($keysToFilter as $key) {
             if (isset($array[$key])) {
                 $extractedArray[$key] = $array[$key];
             }

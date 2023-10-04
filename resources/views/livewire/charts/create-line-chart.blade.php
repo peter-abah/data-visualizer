@@ -11,8 +11,8 @@
         </div>
 
         <div class="mt-4">
-            <x-input-label for="x-axis-column" :value="__('Column for X axis*')" />
-            <select id="x-axis-column" required wire:model="xAxisColumn">
+            <x-input-label for="xAxisColumn" :value="__('Column for X axis*')" />
+            <select id="xAxisColumn" required wire:model="xAxisColumn">
                 <option value="">{{ __('--Select an option--') }}</option>
                 @foreach ($project->columns as $column)
                     <option value="{{ $column }}" {{ $column === old('xAxisColumn') ? 'selected' : '' }}>
@@ -26,8 +26,8 @@
         <ul x-data="{ columnsNo: {{ $dataColumnsNo }} }">
             @for ($i = 0; $i < $dataColumnsNo; $i++)
                 <li class="mt-4">
-                    <x-input-label for="data-column{{ $i }}" :value="__('Data Column ' . ($i + 1) . ' (Ensure it is numeric)*')" />
-                    <select id="data-column{{ $i }}" wire:model="dataColumns.{{ $i }}" required>
+                    <x-input-label for="dataColumn{{ $i }}" :value="__('Data Column ' . ($i + 1) . ' (Ensure it is numeric)*')" />
+                    <select id="dataColumn{{ $i }}" wire:model="dataColumns.{{ $i }}" required>
                         <option value="">{{ __('--Select an option--') }}</option>
                         @foreach ($project->columns as $column)
                             <option value="{{ $column }}">
@@ -39,9 +39,9 @@
 
             <template x-for="i in (columnsNo - {{ $dataColumnsNo }})">
                 <li class="mt-4">
-                    <x-input-label x-bind:for="`data-column${i + {{ $dataColumnsNo }}}`"
+                    <x-input-label x-bind:for="`dataColumn${i + {{ $dataColumnsNo }}}`"
                         x-text="`Data Column ${i + {{ $dataColumnsNo }}} (Ensure it is numeric)*`" />
-                    <select x-bind:id="`data-column${i + {{ $dataColumnsNo }}}`" x-bind:name="`data-columns.*.${i - 1}`"
+                    <select x-bind:id="`dataColumn${i + {{ $dataColumnsNo }}}`" x-bind:name="`dataColumns.*.${i - 1}`"
                         required>
                         <option value="">{{ __('--Select an option--') }}</option>
                         @foreach ($project->columns as $column)
@@ -61,12 +61,12 @@
         {{-- <ul x-data="{ columnsNo: {{ $dataColumnsNo }} }">
             <template x-for="i in columnsNo">
                 <li class="mt-4">
-                    <x-input-label x-bind:for="`data-column${i}`" :value="__('Data Column (Ensure it is numeric)*')" />
-                    <select x-bind:id="`data-column${i}`" wire:model="dataColumn" required>
+                    <x-input-label x-bind:for="`dataColumn${i}`" :value="__('Data Column (Ensure it is numeric)*')" />
+                    <select x-bind:id="`dataColumn${i}`" wire:model="dataColumn" required>
                         <option value="">{{ __('--Select an option--') }}</option>
                         @foreach ($project->columns as $column)
                             <option value="{{ $column }}"
-                                {{ $column === old('data-column') ? 'selected' : '' }}>
+                                {{ $column === old('dataColumn') ? 'selected' : '' }}>
                                 {{ $column }}</option>
                         @endforeach
                     </select>
@@ -77,11 +77,11 @@
         </ul> --}}
 
         {{-- <div class="mt-4">
-            <x-input-label for="data-column" :value="__('Data Column (Ensure it is numeric)*')" />
-            <select id="data-column" wire:model="dataColumn" required>
+            <x-input-label for="dataColumn" :value="__('Data Column (Ensure it is numeric)*')" />
+            <select id="dataColumn" wire:model="dataColumn" required>
                 <option value="">{{ __('--Select an option--') }}</option>
                 @foreach ($project->columns as $column)
-                    <option value="{{ $column }}" {{ $column === old('data-column') ? 'selected' : '' }}>
+                    <option value="{{ $column }}" {{ $column === old('dataColumn') ? 'selected' : '' }}>
                         {{ $column }}</option>
                 @endforeach
             </select>
