@@ -22,7 +22,7 @@
         @include("layouts.navigation")
 
         <!-- Page Content -->
-        <main class="p-8">
+        <main class="p-6">
             @inertia
         </main>
     </div>

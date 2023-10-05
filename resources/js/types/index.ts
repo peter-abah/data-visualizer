@@ -1,6 +1,7 @@
 export enum ChartTypeEnum {
     Line = "line_chart",
     Bar = "bar_chart",
+    Pie = "pie_chart",
 }
 
 export type Chart = {
@@ -8,7 +9,7 @@ export type Chart = {
     data: Record<string, string>[];
     type: ChartTypeEnum;
     config: {
-        dataColumns: string[],
-        xAxisColumn: string,
+        dataColumns: string[];
+        categoryColumn: string;
     };
 };

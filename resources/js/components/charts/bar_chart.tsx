@@ -9,7 +9,8 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
-import { COLORS, getDefaultConfigToRenderChart } from "../../lib/constants";
+import { COLORS } from "@/lib/constants";
+import { getDefaultConfigToRenderChart } from "@/lib";
 
 ChartJS.register(
     CategoryScale,
@@ -28,11 +29,11 @@ export default function BarChart({ chart }: Props) {
 
     return (
         <>
-            <div className="sm:mx-6 lg:mx-auto max-w-5xl h-[25rem]">
+            <div className="relative sm:mx-6 lg:mx-auto max-w-5xl h-[25rem]">
                 <Bar
                     data={{
                         labels: chart.data.map(
-                            (row) => row[config.xAxisColumn]
+                            (row) => row[config.categoryColumn]
                         ),
                         datasets: config.dataColumns.map((dataColumn, i) => ({
                             label: dataColumn,

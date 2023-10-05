@@ -11,16 +11,16 @@
         </div>
 
         <div class="mt-4">
-            <x-input-label for="xAxisColumn" :value="__('Column for X axis*')" />
-            <select id="xAxisColumn" required wire:model="xAxisColumn">
+            <x-input-label for="categoryColumn" :value="__('Column for Category*')" />
+            <select id="categoryColumn" required wire:model="categoryColumn">
                 <option value="">{{ __('--Select an option--') }}</option>
                 @foreach ($project->columns as $column)
-                    <option value="{{ $column }}" {{ $column === old('xAxisColumn') ? 'selected' : '' }}>
+                    <option value="{{ $column }}" {{ $column === old('categoryColumn') ? 'selected' : '' }}>
                         {{ $column }}</option>
                 @endforeach
             </select>
 
-            <x-input-error :messages="$errors->get('xAxisColumn')" />
+            <x-input-error :messages="$errors->get('categoryColumn')" />
         </div>
 
         <ul x-data="{ columnsNo: {{ $dataColumnsNo }} }">

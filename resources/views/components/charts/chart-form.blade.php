@@ -16,15 +16,15 @@
         </div>
 
         <div class="mt-4">
-            <x-input-label for="xAxisColumn" :value="__('Column for X axis*')" />
-            <select name="xAxisColumn" id="xAxisColumn" required>
+            <x-input-label for="categoryColumn" :value="__('Category Column*')" />
+            <select name="categoryColumn" id="categoryColumn" required>
                 <option value="">{{ __('--Select an option--') }}</option>
                 @foreach ($project->columns as $column)
-                    <option value="{{ $column }}" {{ $column === old('xAxisColumn') ? 'selected' : '' }}>
+                    <option value="{{ $column }}" {{ $column === old('categoryColumn') ? 'selected' : '' }}>
                         {{ $column }}</option>
                 @endforeach
             </select>
-            <x-input-error :messages="$errors->get('xAxisColumn')" />
+            <x-input-error :messages="$errors->get('categoryColumn')" />
         </div>
 
         <div x-data="{ isVisible: true }" class="mt-6">
@@ -85,26 +85,6 @@
                 @endforeach
             </select>
             <x-input-error :messages="$errors->get('aggregationOption')" />
-
-            {{-- TODO: SHOULD PROBABLY DELETE
-                <div class="mt-2" x-cloak x-show="isVisible">
-                <p class="text-sm">Applys to:</p>
-                <ul class="flex wrap gap-y-2 gap-x-4">
-                    <li class="flex">
-                        <x-input-label for="aggregation-all" :value="__('All')" class="mr-2 text-sm" />
-                        <input type="checkbox" name="aggregation-all" id="aggregation-all" value="all" checked>
-                    </li>
-
-                    <template x-for="i in columnsNo + 1">
-                        <li class="flex">
-                            <x-input-label x-bind:for="`aggregation-${i}`" x-text="`Data Column ${i}`"
-                                class="mr-2 text-sm" />
-                            <input type="checkbox" name="aggregation-to[]" x-bind:id="`aggregation-${i}`"
-                                x-bind:value="i - 1">
-                        </li>
-                    </template>
-                </ul>
-            </div> --}}
         </div>
 
         <div class="flex items-center justify-end mt-4">

@@ -20,8 +20,8 @@ class CreateLineChart extends Component
     #[Rule('required|max:255', onUpdate: false)]
     public string $name = '';
 
-    #[Rule('required|max:255', as: 'X axis column', onUpdate: false)]
-    public string $xAxisColumn = '';
+    #[Rule('required|max:255', as: 'Category column', onUpdate: false)]
+    public string $categoryColumn = '';
 
     #[Rule('required|array|min:1', as: 'Data column', onUpdate: false)]
     public array $dataColumns = [];
@@ -41,11 +41,11 @@ class CreateLineChart extends Component
             $validator->after([
                 // Validate field exist in data
                 function (Validator $validator) {
-                    // Check X axis column
-                    if (!$this->isColumnInProject($this->xAxisColumn)) {
+                    // Check Category column
+                    if (!$this->isColumnInProject($this->categoryColumn)) {
                         $validator->errors()->add(
-                            'xAxisColumn',
-                            "$this->xAxisColumn doesn't exist in project data"
+                            'categoryColumn',
+                            "$this->categoryColumn doesn't exist in project data"
                         );
                     }
 
@@ -105,13 +105,13 @@ class CreateLineChart extends Component
         $chartData = $chart->createData(
             $this->project,
             $validated['dataColumn'],
-            $validated['xAxisColumn']
+            $validated['categoryColumn']
         );
         $chart->data = $chartData;
 
         $chart->config = [
             'dataColumn' => $validated['dataColumn'],
-            'xAxisColumn' => $validated['xAxisColumn']
+            'categoryColumn' => $validated['categoryColumn']
         ];
 
         Auth::user()->charts()->save($chart);

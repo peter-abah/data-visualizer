@@ -27,11 +27,8 @@ class ChartController extends Controller
      */
     public function create(Request $request, Project $project): View
     {
-        $chartType = $request->input('type') ?? ChartType::LineChart;
-
-        return view("charts.create.$chartType", [
+        return view("charts.create", [
             'project' => $project,
-            'chartType' => $chartType,
         ]);
     }
 

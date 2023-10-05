@@ -28,7 +28,7 @@ class StoreChartRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'xAxisColumn' => 'required|max:255',
+            'categoryColumn' => 'required|max:255',
             'dataColumns' => 'array|required|min:1|max:3',
             'dataColumns.*' => 'required|string|max:255',
             'type' => 'required',
@@ -41,13 +41,13 @@ class StoreChartRequest extends FormRequest
         return [
             // Validate column fields exist in project
             function (Validator $validator) {
-                // Validate X axis column in column
-                $xAxisColumn = $this->input('xAxisColumn');
+                // Validate Category column in column
+                $categoryColumn = $this->input('categoryColumn');
 
-                if (!$this->isColumnInProject($xAxisColumn)) {
+                if (!$this->isColumnInProject($categoryColumn)) {
                     $validator->errors()->add(
-                        'xAxisColumn',
-                        "$xAxisColumn doesn't exist in project data"
+                        'categoryColumn',
+                        "$categoryColumn doesn't exist in project data"
                     );
                 }
 

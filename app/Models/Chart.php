@@ -36,14 +36,14 @@ class Chart extends Model
     public function createData(): array
     {
         $csvFile = new CSVFile(Storage::path($this->project->file_path));
-        $xAxisColumn = $this->config['xAxisColumn'];
+        $categoryColumn = $this->config['categoryColumn'];
         $dataColumns = $this->config['dataColumns'];
         $data = [];
         $keyCount = [];
 
         foreach ($csvFile as $row) {
             $row = mb_convert_encoding($row, 'UTF-8', 'UTF-8');
-            $key = $row["$xAxisColumn"];
+            $key = $row["$categoryColumn"];
             $dataColumnsRow = Helpers::filterKeysInArray($row, $dataColumns);
 
             if (isset($data[$key])) {
@@ -53,7 +53,7 @@ class Chart extends Model
                 $keyCount[$key] += 1;
             } else {
                 $data[$key] = array_merge([
-                    "$xAxisColumn" => $key
+                    "$categoryColumn" => $key
                 ], $dataColumnsRow);
                 $keyCount[$key] = 1;
             }
@@ -68,7 +68,7 @@ class Chart extends Model
 
     public function createConfig(array $validated): array
     {
-        return Helpers::filterKeysInArray($validated, ['dataColumns', 'xAxisColumn', 'aggregationOption']);
+        return Helpers::filterKeysInArray($validated, ['dataColumns', 'categoryColumn', 'aggregationOption']);
     }
 
     private function aggregateAverage(array $data, array $keyCount): array

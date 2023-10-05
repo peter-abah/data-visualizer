@@ -6,7 +6,10 @@
             </h1>
 
             <div class="ml-auto flex gap-4 justify-end">
-                <x-create-chart-btn :project="$project" />
+                <a href={{ route('projects.charts.create', $project) }}
+                    class="px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50">
+                    Create chart
+                </a>
 
                 <a href={{ route('projects.edit', $project) }}
                     class="px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50">
@@ -33,8 +36,10 @@
         @if (count($project->charts) === 0)
             <div class="flex flex-col w-fit mx-auto items-center mt-16">
                 <p class="text-xl md:text-3xl mb-4">No charts created yet!</p>
-                <x-create-chart-btn :project="$project" />
-
+                <a href={{ route('projects.charts.create', $project) }}
+                    class="px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50">
+                    Create chart
+                </a>
             </div>
         @else
             <div class="flex flex-col">
