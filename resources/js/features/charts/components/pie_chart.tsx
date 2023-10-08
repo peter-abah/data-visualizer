@@ -4,8 +4,8 @@ import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-import { COLORS } from "@/lib/constants";
-import { getChartOptions } from "@/lib";
+import { COLORS } from "../constants";
+import { getChartOptions } from "../chartOptions";
 
 type Props = {
     chart: ChartType;

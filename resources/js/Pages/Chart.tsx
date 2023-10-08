@@ -1,7 +1,5 @@
-import { Chart as ChartType, ChartTypeEnum } from "../types";
-import LineChart from "../components/charts/line_chart";
-import BarChart from "../components/charts/bar_chart";
-import PieChart from "../components/charts/pie_chart";
+import { Chart as ChartType, ChartTypeEnum } from "@/types";
+import { LineChart, BarChart, PieChart } from "@/features/charts/components";
 
 const chartTypeToComponent = {
     [ChartTypeEnum.Line]: LineChart,

@@ -1,4 +1,4 @@
-import { Chart as ChartType } from "../../types";
+import { Chart as ChartType } from "@/types";
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -9,8 +9,8 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
-import { COLORS } from "@/lib/constants";
-import { getChartOptions } from "@/lib";
+import { COLORS } from "../constants";
+import { getChartOptions } from "../chartOptions";
 
 ChartJS.register(
     CategoryScale,

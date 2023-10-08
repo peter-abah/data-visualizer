@@ -1,4 +1,4 @@
-import { Chart as ChartType } from "../../types";
+import { Chart as ChartType } from "@/types";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -14,8 +14,8 @@ import {
 } from "chart.js";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 
-import { COLORS } from "@/lib/constants";
-import { getChartOptions } from "@/lib";
+import { COLORS } from "../constants";
+import { getChartOptions } from "../chartOptions";
 
 ChartJS.register(
     CategoryScale,
