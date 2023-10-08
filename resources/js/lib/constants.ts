@@ -1,3 +1,5 @@
+import { ChartTypeEnum } from "@/types";
+
 export const COLORS = [
     "#063951",
     "#C13018",
@@ -8,3 +10,5 @@ export const COLORS = [
     "#7B0051",
     "#00B09B",
 ];
+
+export const CARTESAIN_CHART_TYPES = [ChartTypeEnum.Line, ChartTypeEnum.Bar];

@@ -6,7 +6,7 @@ import PieChart from "../components/charts/pie_chart";
 const chartTypeToComponent = {
     [ChartTypeEnum.Line]: LineChart,
     [ChartTypeEnum.Bar]: BarChart,
-    [ChartTypeEnum.Pie]: PieChart
+    [ChartTypeEnum.Pie]: PieChart,
 };
 
 type Props = {
@@ -22,7 +22,9 @@ export default function Chart({ chart }: Props) {
                 {chart.name}
             </h1>
 
-            <ChartComponent chart={chart} />
+            <div className="relative sm:mx-6 lg:mx-auto max-w-5xl h-[25rem] [&>*]:mx-auto">
+                <ChartComponent chart={chart} />
+            </div>
         </>
     );
 }

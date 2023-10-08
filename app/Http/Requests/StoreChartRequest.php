@@ -33,6 +33,8 @@ class StoreChartRequest extends FormRequest
             'dataColumns.*' => 'required|string|max:255',
             'type' => 'required',
             'aggregationOption' => ['required', new Enum(AggregationOption::class)],
+            'scaleType' => 'nullable|string',
+            'dateFormat' => 'nullable|string',
         ];
     }
 

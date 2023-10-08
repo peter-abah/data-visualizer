@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto">
         <h1 class="text-xl font-bold mb-6">Create Chart</h1>
-        <form x-data="{ columnsNo: 0 }" method="POST"
+        <form x-data="{ columnsNo: 0, showScaleTypeInput: false }" method="POST"
             action="{{ route('projects.charts.store', ['project' => $project]) }}">
             @csrf
 
@@ -14,7 +14,8 @@
 
             <div class="mt-4">
                 <x-input-label for="type" :value="__('Chart type*')" />
-                <select name="type" id="type" required>
+                <select name="type" id="type" required
+                    x-on:change="showScaleTypeInput = JSON.parse('{{ json_encode(\App\Enums\ChartType::getCartesianTypes()) }}').includes($event.target.value)">
                     <option value="">{{ __('--Select an option--') }}</option>
                     @foreach (\App\Enums\ChartType::cases() as $type)
                         <option value="{{ $type->value }}" @selected($type->value === old('type'))>
@@ -24,15 +25,38 @@
                 <x-input-error :messages="$errors->get('type')" />
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4" x-data="{ showFormatInput: false }">
                 <x-input-label for="categoryColumn" :value="__('Category Column*')" />
+
                 <select name="categoryColumn" id="categoryColumn" required>
                     <option value="">{{ __('--Select an option--') }}</option>
                     @foreach ($project->columns as $column)
-                        <option value="{{ $column }}" {{ $column === old('categoryColumn') ? 'selected' : '' }}>
+                        <option value="{{ $column }}" @selected($column === old('categoryColumn'))>
                             {{ $column }}</option>
                     @endforeach
                 </select>
+
+                <div class="inline-flex flex-col ml-4" x-cloak x-show="showScaleTypeInput">
+                    <div class="inline-flex items-center">
+                        <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
+                        <select name="scaleType" id="scaleType" required class="text-sm"
+                            x-on:change="showFormatInput = $event.target.value === '{{ \App\Enums\ScaleType::Time->value }}'">
+                            @foreach (\App\Enums\ScaleType::cases() as $option)
+                                <option value="{{ $option->value }}" @selected(old('scaleType') ? $option->value === old('scaleType') : $option === \App\Enums\ScaleType::Category)>
+                                    {{ ucfirst($option->value) }}</option>
+                            @endforeach
+                        </select>
+                        {{--
+                            TODO: Show info on how to input date formats. Strings in ISO dates do not need a custom format
+                        --}}
+                    </div>
+
+                    <div class="inline-flex items-center mt-2" x-cloak x-show="showFormatInput">
+                        <x-input-label for="dateFormat" :value="__('date format')" class="mr-2 text-sm" />
+                        <x-text-input type="text" name="dateFormat" id="dateFormat" class="text-sm" />
+                    </div>
+                </div>
+
                 <x-input-error :messages="$errors->get('categoryColumn')" />
             </div>
 
@@ -88,8 +112,7 @@
 
                 <select name="aggregationOption" id="aggregationOption" required>
                     @foreach (\App\Enums\AggregationOption::cases() as $option)
-                        <option value="{{ $option }}"
-                            {{ $option->value === old('aggregationOption') ? 'selected' : 'sum' }}>
+                        <option value="{{ $option }}" @selected(old('aggregationOption') ? $option->value === old('aggregationOption') : $option === \App\Enums\AggregationOption::Sum)>
                             {{ ucwords($option->value) }}</option>
                     @endforeach
                 </select>

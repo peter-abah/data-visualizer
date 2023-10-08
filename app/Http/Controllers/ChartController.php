@@ -7,6 +7,7 @@ use App\Helpers\Helpers;
 use App\Http\Requests\StoreChartRequest;
 use App\Models\Chart;
 use App\Models\Project;
+use App\Services\ChartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -14,6 +15,10 @@ use Inertia\Inertia;
 
 class ChartController extends Controller
 {
+
+    public function __construct(protected ChartService $chartService)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -37,15 +42,7 @@ class ChartController extends Controller
      */
     public function store(StoreChartRequest $request, Project $project): RedirectResponse
     {
-        $validated = $request->validated();
-
-        $chart = new Chart($validated);
-        $chart->project()->associate($project);
-        $chart->config = $chart->createConfig($validated);
-        $chart->data = $chart->createData();
-
-        $request->user()->charts()->save($chart);
-
+        $chart = $this->chartService->createChart($request, $project);
         return redirect(route('charts.show', ['chart' => $chart]));
     }
 
