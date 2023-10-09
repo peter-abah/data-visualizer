@@ -3,23 +3,19 @@ import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
-    LinearScale,
     BarElement,
-    Title,
     Tooltip,
     Legend,
+    ChartOptions,
 } from "chart.js";
 import { COLORS } from "../constants";
-import { getChartOptions } from "../chartOptions";
+import {
+    getCartesianChartOptions,
+    getGeneralChartOptions,
+} from "../chartOptions";
+import { merge } from "chart.js/helpers";
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-);
+ChartJS.register(CategoryScale, BarElement, Tooltip, Legend);
 
 type Props = {
     chart: ChartType;
@@ -38,7 +34,13 @@ export default function BarChart({ chart }: Props) {
                     borderColor: COLORS[i],
                 })),
             }}
-            options={getChartOptions(chart)}
+            options={getBarChartOptions(chart)}
         />
     );
+}
+
+export function getBarChartOptions(chart: ChartType) {
+    let options = getGeneralChartOptions(chart);
+    options = merge(options, getCartesianChartOptions(chart));
+    return options as ChartOptions<"bar">;
 }

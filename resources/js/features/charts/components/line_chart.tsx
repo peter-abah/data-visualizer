@@ -1,4 +1,4 @@
-import { Chart as ChartType } from "@/types";
+import { CartesianScale, Chart as ChartType } from "@/types";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -8,14 +8,19 @@ import {
     TimeScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend,
+    ChartOptions,
 } from "chart.js";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 
 import { COLORS } from "../constants";
-import { getChartOptions } from "../chartOptions";
+import {
+    getCartesianChartOptions,
+    getGeneralChartOptions,
+    getTimeScaleOptions,
+} from "../chartOptions";
+import { merge } from "chart.js/helpers";
 
 ChartJS.register(
     CategoryScale,
@@ -24,7 +29,6 @@ ChartJS.register(
     TimeScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
     Legend
 );
@@ -47,7 +51,18 @@ export default function LineChart({ chart }: Props) {
                     borderColor: COLORS[i],
                 })),
             }}
-            options={getChartOptions(chart)}
+            options={getLineChartOptions(chart)}
         />
     );
+}
+
+export function getLineChartOptions(chart: ChartType) {
+    let options = getGeneralChartOptions(chart);
+    options = merge(options, getCartesianChartOptions);
+
+    if (chart.config.scaleType === "time") {
+        options = merge(options, getTimeScaleOptions(chart));
+    }
+
+    return options as ChartOptions<"line">;
 }

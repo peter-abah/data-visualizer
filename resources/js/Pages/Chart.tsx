@@ -1,10 +1,16 @@
 import { Chart as ChartType, ChartTypeEnum } from "@/types";
-import { LineChart, BarChart, PieChart } from "@/features/charts/components";
+import {
+    LineChart,
+    BarChart,
+    PieChart,
+    RadarChart,
+} from "@/features/charts/components";
 
 const chartTypeToComponent = {
     [ChartTypeEnum.Line]: LineChart,
     [ChartTypeEnum.Bar]: BarChart,
     [ChartTypeEnum.Pie]: PieChart,
+    [ChartTypeEnum.Radar]: RadarChart,
 };
 
 type Props = {
@@ -20,7 +26,7 @@ export default function Chart({ chart }: Props) {
                 {chart.name}
             </h1>
 
-            <div className="relative sm:mx-6 lg:mx-auto max-w-5xl h-[25rem] [&>*]:mx-auto">
+            <div className="relative sm:mx-6 lg:mx-auto max-w-5xl min-h-[25rem] max-h-screen [&>*]:mx-auto">
                 <ChartComponent chart={chart} />
             </div>
         </>

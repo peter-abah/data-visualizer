@@ -1,11 +1,19 @@
 import { Chart as ChartType } from "@/types";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    ChartOptions,
+} from "chart.js";
 import { Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 import { COLORS } from "../constants";
-import { getChartOptions } from "../chartOptions";
+import {
+    getGeneralChartOptions,
+} from "../chartOptions";
 
 type Props = {
     chart: ChartType;
@@ -28,7 +36,11 @@ export default function PieChart({ chart }: Props) {
                     },
                 ],
             }}
-            options={getChartOptions(chart)}
+            options={getPieChartOptions(chart)}
         />
     );
+}
+
+export function getPieChartOptions(chart: ChartType) {
+    return getGeneralChartOptions(chart) as ChartOptions<"pie">;
 }

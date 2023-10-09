@@ -2,9 +2,13 @@ export enum ChartTypeEnum {
     Line = "line_chart",
     Bar = "bar_chart",
     Pie = "pie_chart",
+    Radar = "radar_chart",
 }
 
-export type ChartScale = "time" | "linear" | "category" | "logarithmic";
+export type ChartType = `${ChartTypeEnum}`;
+
+export type CartesianScale = "time" | "linear" | "category" | "logarithmic";
+export type ChartScale = CartesianScale | "radialLinear";
 
 export type ChartConfig = {
     dataColumns: string[];
