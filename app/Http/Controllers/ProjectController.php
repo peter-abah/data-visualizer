@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CSVFile;
-use App\Services\Helpers;
+use App\Http\Requests\Projects\StoreRequest;
+use App\Http\Requests\Projects\UpdateRequest;
 use App\Models\Project;
+use App\Services\ProjectService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -15,7 +15,7 @@ class ProjectController extends Controller
     /**
      * Create the controller instance.
      */
-    public function __construct()
+    public function __construct(protected ProjectService $projectService)
     {
         $this->authorizeResource(Project::class, 'project');
     }
@@ -26,7 +26,7 @@ class ProjectController extends Controller
     public function index(Request $request): View
     {
         return view('dashboard', [
-            'projects' => $request->user()->projects
+            'projects' => $request->user()->projects,
         ]);
     }
 
@@ -41,25 +41,10 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'file' => 'required|mimes:csv,txt|max:2048',
-            'description' => 'nullable|string'
-        ]);
-
-        Helpers::removeBOMFromUploadedFile($request->file('file'));
-
-        $columns = (new CSVFile($request->file('file')->getRealPath()))->getKeys();
-        $file_path = $request->file('file')->store('project_files');
-
-        $project = new Project($validated);
-        $project->file_path = $file_path;
-        $project->columns = $columns;
-        $request->user()->projects()->save($project);
-
-        return redirect(route('dashboard'));
+        $project = $this->projectService->createProject($request);
+        return redirect(route('projects.show', $project));
     }
 
     /**
@@ -67,9 +52,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project): View
     {
-        return view('projects.show', [
-            'project' => $project
-        ]);
+        return view('projects.show', ['project' => $project]);
     }
 
     /**
@@ -77,15 +60,16 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('projects.edit', ['project' => $project]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateRequest $request, Project $project)
     {
-        //
+        $project = $this->projectService->updateProject($request);
+        return view('projects.show', ['project' => $project]);
     }
 
     /**

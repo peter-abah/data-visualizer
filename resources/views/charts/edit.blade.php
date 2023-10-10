@@ -1,10 +1,6 @@
 <x-app-layout>
     <div class="mx-auto max-w-2xl">
-        <div class="mb-6 flex justify-between">
-            <h1 class="text-xl font-bold">Chart Settings</h1>
-            <a class="underline text-lg hover:no-underline"
-                href={{ route('charts.show', $chart) }}>{{ $chart->name }}</a>
-        </div>
+        <h1 class="mb-6 text-xl font-bold">Chart Settings</h1>
 
         <form x-data="{
             columnsNo: 0,
@@ -156,21 +152,9 @@
 
             <div class="mt-4 flex items-center justify-end">
                 <x-primary-button>{{ __('Save') }}</x-primary-button>
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('charts.show', $chart) }}"
                     class="ml-4">{{ __('Cancel') }}</a>
             </div>
         </form>
     </div>
-
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('main', () => ({
-                open: false,
-
-                toggle() {
-                    this.open = !this.open
-                },
-            }))
-        })
-    </script>
 </x-app-layout>
