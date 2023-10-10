@@ -17,9 +17,15 @@ export type ChartConfig = {
     dateFormat: string | null;
 };
 
+export type Project = {
+    name: string;
+    id: number;
+}
+
 export type Chart = {
     name: string;
     data: Record<string, string>[];
     type: ChartTypeEnum;
     config: ChartConfig;
+    project: Project;
 };

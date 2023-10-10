@@ -25,7 +25,10 @@ export function getCartesianChartOptions(chart: Chart): ChartOptions {
 export function getTimeScaleOptions(chart: Chart): ChartOptions {
     return {
         scales: {
-            x: { time: { parser: chart.config.dateFormat || undefined } },
+            x: {
+                type: "time",
+                time: { parser: chart.config.dateFormat || undefined },
+            },
         },
     };
 }

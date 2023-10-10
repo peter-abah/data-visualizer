@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\ViewErrorBag;
 
 class Helpers
 {
@@ -28,7 +29,8 @@ class Helpers
     }
 
     // Filters keys and values in $array from $keysToFilter and returns a new array with the filtered keys
-    public static function filterKeysInArray(array $array, array $keysToFilter) {
+    public static function filterKeysInArray(array $array, array $keysToFilter)
+    {
         $extractedArray = [];
 
         foreach ($keysToFilter as $key) {
@@ -38,5 +40,18 @@ class Helpers
         }
 
         return $extractedArray;
+    }
+
+    public static function mergeDataColumnsErrors(ViewErrorBag $errors, int $columnsNo)
+    {
+        if ($columnsNo < 1) {
+            return [];
+        }
+
+        $mapFunc = function ($i) use ($errors) {
+            return $errors->get("dataColumns.$i");
+        };
+
+        return array_merge($errors->get('dataColumns'), ...array_map($mapFunc, range(0, $columnsNo - 1)));
     }
 }

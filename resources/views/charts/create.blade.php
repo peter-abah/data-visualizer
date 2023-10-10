@@ -1,13 +1,14 @@
 <x-app-layout>
-    <div class="max-w-2xl mx-auto">
-        <h1 class="text-xl font-bold mb-6">Create Chart</h1>
+    <div class="mx-auto max-w-2xl">
+        <h1 class="mb-6 text-xl font-bold">Create Chart</h1>
         <form x-data="{ columnsNo: 0, showScaleTypeInput: false }" method="POST"
             action="{{ route('projects.charts.store', ['project' => $project]) }}">
             @csrf
 
             <div class="mt-4">
                 <x-input-label for="name" :value="__('Name*')" />
-                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')"
+                <x-text-input id="name" class="mt-1 block w-full" type="text" name="name"
+                    :value="old('name')"
                     required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
@@ -36,7 +37,7 @@
                     @endforeach
                 </select>
 
-                <div class="inline-flex flex-col ml-4" x-cloak x-show="showScaleTypeInput">
+                <div class="ml-4 inline-flex flex-col" x-cloak x-show="showScaleTypeInput">
                     <div class="inline-flex items-center">
                         <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
                         <select name="scaleType" id="scaleType" required class="text-sm"
@@ -51,9 +52,10 @@
                         --}}
                     </div>
 
-                    <div class="inline-flex items-center mt-2" x-cloak x-show="showFormatInput">
+                    <div class="mt-2 inline-flex items-center" x-cloak x-show="showFormatInput">
                         <x-input-label for="dateFormat" :value="__('date format')" class="mr-2 text-sm" />
-                        <x-text-input type="text" name="dateFormat" id="dateFormat" class="text-sm" />
+                        <x-text-input type="text" name="dateFormat" id="dateFormat"
+                            class="text-sm" />
                     </div>
                 </div>
 
@@ -65,7 +67,8 @@
                     <p class="font-bold">Data Columns</p>
                     <button type="button" @click="isVisible = !isVisible" class="px-2">
                         <span x-text="isVisible ? 'condense' : 'expand'" class="sr-only"></span>
-                        <x-icons.expand-more class="rotate-180" x-bind:class="{ 'rotate-0': !isVisible }" />
+                        <x-icons.expand-more class="rotate-180"
+                            x-bind:class="{ 'rotate-0': !isVisible }" />
                     </button>
                 </div>
 
@@ -76,7 +79,8 @@
                             <select name="dataColumns[]" id="dataColumns.1" required>
                                 <option value="">{{ __('--Select an option--') }}</option>
                                 @foreach ($project->columns as $column)
-                                    <option value="{{ $column }}">{{ $column }}</option>
+                                    <option value="{{ $column }}">{{ $column }}
+                                    </option>
                                 @endforeach
                             </select>
                         </li>
@@ -85,8 +89,10 @@
                             <li class="mt-4">
                                 <x-input-label x-bind:for="`dataColumns.*.${i + 1}`"
                                     x-text="`Data Column ${i + 1} (Ensure it is numeric)*`" />
-                                <select x-bind:id="`dataColumns.${i + 1}}`" name="dataColumns[]" required>
-                                    <option value="">{{ __('--Select an option--') }}</option>
+                                <select x-bind:id="`dataColumns.${i + 1}}`" name="dataColumns[]"
+                                    required>
+                                    <option value="">{{ __('--Select an option--') }}
+                                    </option>
                                     @foreach ($project->columns as $column)
                                         <option value="{{ $column }}">
                                             {{ $column }}</option>
@@ -96,7 +102,10 @@
                         </template>
                     </ul>
 
-                    <x-input-error :messages="$errors->get('dataColumns')" />
+                    <x-input-error :messages="\App\Services\Helpers::mergeDataColumnsErrors(
+                        $errors,
+                        count(old('dataColumns') ?? []),
+                    )" />
 
                     <div class="mt-4 flex gap-4">
                         <x-primary-button type="button" @click="columnsNo++"
@@ -119,7 +128,7 @@
                 <x-input-error :messages="$errors->get('aggregationOption')" />
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="mt-4 flex items-center justify-end">
                 <x-primary-button>{{ __('Save') }}</x-primary-button>
                 <a href="{{ route('dashboard') }}" class="ml-4">{{ __('Cancel') }}</a>
             </div>

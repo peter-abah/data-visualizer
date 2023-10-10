@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ChartType;
-use App\Helpers\Helpers;
 use App\Http\Requests\StoreChartRequest;
+use App\Http\Requests\UpdateChartRequest;
 use App\Models\Chart;
 use App\Models\Project;
 use App\Services\ChartService;
@@ -51,25 +50,45 @@ class ChartController extends Controller
      */
     public function show(Chart $chart)
     {
+        $chart->load('project');
         return Inertia::render('Chart', [
-            'chart' => $chart
+            'chart' => $chart,
+            'linkToProject' => route('projects.show', $chart->project),
+            'linkToSettings' => route('charts.edit', $chart),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Chart $chart)
+    public function edit(Chart $chart): View
     {
-        //
+        return view('charts.edit', ['chart' => $chart]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Chart $chart)
+    public function update(UpdateChartRequest $request, Chart $chart): RedirectResponse
     {
-        //
+        $attributes = $request->validated();
+
+        $hasColumnsChanged = $attributes['categoryColumn'] !== $chart->config['categoryColumn']
+            || ($attributes['removedColumns'] ?? false)
+            || ($attributes['dataColumns'] ?? false);
+
+        $chart->config = array_merge($chart->config, $chart->createConfig([...$attributes,
+            'dataColumns' => $request->getDataColumns()])
+        );
+
+        if ($hasColumnsChanged) {
+            $chart->data = $chart->createData();
+        }
+
+        $chart->update($attributes);
+
+
+        return redirect(route('charts.show', ['chart' => $chart]));
     }
 
     /**

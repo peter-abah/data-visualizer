@@ -26,8 +26,10 @@ class Chart extends Model
         'categoryColumn',
         'aggregationOption',
         'scaleType',
-        'dateFormat'
+        'dateFormat',
     ];
+
+    protected bool $hasColumnsChanged = false;
 
     public $fillable = ['name', 'type'];
 
@@ -61,7 +63,8 @@ class Chart extends Model
         return Helpers::filterKeysInArray($attributes, $this->configKeys);
     }
 
-    private function generateData(): array {
+    private function generateData(): array
+    {
         $data = [];
         $csvFile = new CSVFile(Storage::path($this->project->file_path));
         $categoryColumn = $this->config['categoryColumn'];
@@ -88,7 +91,7 @@ class Chart extends Model
         return $data;
     }
 
-    private function aggregateData(array $data) : array
+    private function aggregateData(array $data): array
     {
         switch ($this->config['aggregationOption']) {
             case AggregationOption::Average->value:
@@ -130,7 +133,7 @@ class Chart extends Model
         return $data;
     }
 
-    private function modifyDataByType(array $data) : array
+    private function modifyDataByType(array $data): array
     {
         switch ($this->type) {
             case ChartType::PieChart:

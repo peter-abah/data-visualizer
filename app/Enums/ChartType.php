@@ -13,4 +13,9 @@ enum ChartType: string
     {
         return [self::BarChart->value, self::LineChart->value];
     }
+
+    public function isCartesian()
+    {
+        return in_array($this->value, self::getCartesianTypes());
+    }
 }

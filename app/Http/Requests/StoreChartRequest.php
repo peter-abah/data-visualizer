@@ -3,11 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Enums\AggregationOption;
-use App\Services\CSVFile;
+use App\Rules\ColumnInProject;
+use App\Rules\ColumnIsNumeric;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Enum;
-use Illuminate\Validation\Validator;
 
 class StoreChartRequest extends FormRequest
 {
@@ -28,67 +27,13 @@ class StoreChartRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'categoryColumn' => 'required|max:255',
+            'categoryColumn' => ['required', 'string', 'max:255', new ColumnInProject($this->project)],
             'dataColumns' => 'array|required|min:1|max:3',
-            'dataColumns.*' => 'required|string|max:255',
+            'dataColumns.*' => ['required', 'string', 'max:255', new ColumnInProject($this->project), new ColumnIsNumeric($this->project)],
             'type' => 'required',
             'aggregationOption' => ['required', new Enum(AggregationOption::class)],
             'scaleType' => 'nullable|string',
             'dateFormat' => 'nullable|string',
         ];
-    }
-
-    public function after(): array
-    {
-        return [
-            // Validate column fields exist in project
-            function (Validator $validator) {
-                // Validate Category column in column
-                $categoryColumn = $this->input('categoryColumn');
-
-                if (!$this->isColumnInProject($categoryColumn)) {
-                    $validator->errors()->add(
-                        'categoryColumn',
-                        "$categoryColumn doesn't exist in project data"
-                    );
-                }
-
-                // Validate data column
-                $dataColumns = $this->input('dataColumns');
-
-                foreach ($dataColumns as $column) {
-                    if (!$this->isColumnInProject($column)) {
-                        $validator->errors()->add(
-                            'dataColumns',
-                            "Data column ($column) doesn't exist in project data"
-                        );
-                    }
-                }
-            },
-
-            // Validate data field is numeric
-            function (Validator $validator) {
-                $dataColumns = $this->input('dataColumns');
-                if (!$dataColumns)
-                    return;
-
-                $csvFile = new CSVFile(Storage::path($this->project->file_path));
-                foreach ($csvFile as $row) {
-                    foreach ($dataColumns as $column) {
-                        if (!is_numeric($row[$column])) {
-                            $validator->errors()->add(
-                                'dataColumns',
-                                "Data column ($column) is not numeric"
-                            );
-                        }
-                    }
-                }
-            }
-        ];
-    }
-
-    private function isColumnInProject(string $column): bool
-    {
-        return in_array($column, $this->project->columns);
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Enums;
 
-enum ScaleType: string {
-    case Time = 'time';
-    case Linear = 'linear';
+enum ScaleType: string
+{
     case Category = 'category';
+    case Linear = 'linear';
     case Logarithmic = 'logarithmic';
+    case Time = 'time';
 }
