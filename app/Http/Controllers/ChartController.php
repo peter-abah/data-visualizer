@@ -17,6 +17,7 @@ class ChartController extends Controller
 
     public function __construct(protected ChartService $chartService)
     {
+        $this->authorizeResource(Chart::class, 'chart');
     }
     /**
      * Display a listing of the resource.
