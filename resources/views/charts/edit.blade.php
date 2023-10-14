@@ -26,6 +26,8 @@
                     <x-input-label for="categoryColumn" :value="__('Category Column*')" />
 
                     <select name="categoryColumn" id="categoryColumn" required>
+                        <option value="">{{ __('--Select an option--') }}
+                        </option>
                         @foreach ($chart->project->columns as $column)
                             <option value="{{ $column }}"
                                 @selected($column === (old('categoryColumn') ? old('categoryColumn') : $chart->config['categoryColumn']))>
@@ -155,13 +157,14 @@
             </form>
         </div>
 
-        @if (($chart->config['scaleType'] ?? null) === \App\Enums\ScaleType::Time->value)
-            <div>
-                <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">Others</h2>
+
+        <div>
+            <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">Others</h2>
+            @if (($chart->config['scaleType'] ?? null) === \App\Enums\ScaleType::Time->value)
                 <div class="mt-4 flex items-center justify-between">
                     <div class="w-9/12">
                         <strong class="text-lg">Sort data by date</strong>
-                        <p>This will sort the chart data using date and will only work if the
+                        <p class="text-sm">This will sort the chart data using date and will only work if the
                             <strong>scale type</strong> is set to <strong>time</strong>
                         </p>
                     </div>
@@ -174,8 +177,42 @@
                         <x-primary-button>Sort data</x-primary-button>
                     </form>
                 </div>
+            @endif
+
+            <div class="mt-4 flex items-center justify-between">
+                <div class="w-9/12">
+                    <strong class="">Rebuild chart data</strong>
+                    <p class="text-sm">This is important if you update or change project data. Chart data is not
+                        automatically changed in case of invalid columns in the new project
+                        data.</strong>
+                    </p>
+                    <x-input-error :messages="$errors->get('rebuildData')" class="mt-1" />
+                </div>
+
+
+                <form method="POST" action="{{ route('charts.rebuildData', ['chart' => $chart]) }}">
+                    @csrf
+                    @method('PUT')
+
+                    <x-primary-button>Rebuild data</x-primary-button>
+                </form>
             </div>
-        @endif
+
+            {{-- <div class="mt-4">
+                <form method="POST"
+                    action="{{ route('charts.config', ['chart' => $chart]) }}">
+                    @csrf
+                    @method('PUT')
+
+                    <x-input-label for="sectorLimit" :value="__('Sector Limit (leave blank for no limit)')" />
+                    <x-text-input id="sector-limit" class="mt-1 block w-full" type="number"
+                        name="sectorLimit"
+                        :value="old('sectorLimit') ?? ($chart->config['sectorLimit'] ?? '')" required autofocus autocomplete="name" />
+                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                </form>
+            </div> --}}
+        </div>
+
     </div>
 
 

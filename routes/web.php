@@ -28,6 +28,7 @@ Route::resource("projects.charts", ChartController::class)->shallow()->scoped()-
 Route::controller(ChartUpdateController::class)->group(function () {
     Route::put('/charts/{chart}', 'update')->name('charts.update');
     Route::put('/charts/sort/{chart}', 'sort')->name('charts.sort');
+    Route::put('/charts/rebuild-data/{chart}', 'rebuildData')->name('charts.rebuildData');
 });
 
 Route::middleware('auth')->group(function () {
