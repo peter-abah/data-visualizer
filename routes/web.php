@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChartController;
+use App\Http\Controllers\ChartUpdateController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
@@ -14,15 +15,20 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 Route::get('/dashboard', [ProjectController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::redirect('/', '/dashboard');
 
 Route::resource("projects", ProjectController::class)->except([
-    "index"
+    "index",
 ])->middleware(["auth"]);
-Route::resource("projects.charts", ChartController::class)->shallow()->scoped();
+Route::resource("projects.charts", ChartController::class)->shallow()->scoped()->except('update');
+
+Route::controller(ChartUpdateController::class)->group(function () {
+    Route::put('/charts/{chart}', 'update')->name('charts.update');
+    Route::put('/charts/sort/{chart}', 'sort')->name('charts.sort');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

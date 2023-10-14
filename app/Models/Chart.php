@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\AggregationOption;
 use App\Enums\ChartType;
+use App\Enums\ScaleType;
 use App\Services\CSVFile;
 use App\Services\Helpers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,11 +50,13 @@ class Chart extends Model
         return $this->belongsTo(Project::class);
     }
 
+    // Create chart data from project and modify based on config
     public function createData(): array
     {
         $data = $this->generateData();
         $data = $this->aggregateData($data);
         $data = $this->modifyDataByType($data);
+        // $data = $this->modifyDataByConfig($data);
 
         return array_values($data);
     }
@@ -63,6 +66,23 @@ class Chart extends Model
         return Helpers::filterKeysInArray($attributes, $this->configKeys);
     }
 
+    // Sort data by date and assumes date is in ISO format
+    public function sortDataByTime()
+    {
+        if (($this->config['scaleType'] ?? null) !== ScaleType::Time->value) {
+            return $this->data;
+        }
+
+        $dateColumn = $this->config['categoryColumn'];
+        $data = $this->data;
+        usort($data, function ($a, $b) use ($dateColumn) {
+            return strcmp($a[$dateColumn], $b[$dateColumn]);
+        });
+
+        return $data;
+    }
+
+    // Generate chart data from project
     private function generateData(): array
     {
         $data = [];

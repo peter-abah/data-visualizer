@@ -23,7 +23,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'file' => 'required|mimes:csv,txt|max:1048',
+            'file' => 'required|mimes:csv,txt|max:1024',
             'description' => 'nullable|string',
         ];
     }

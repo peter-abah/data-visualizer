@@ -68,31 +68,6 @@ class ChartController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateChartRequest $request, Chart $chart): RedirectResponse
-    {
-        $attributes = $request->validated();
-
-        $hasColumnsChanged = $attributes['categoryColumn'] !== $chart->config['categoryColumn']
-            || ($attributes['removedColumns'] ?? false)
-            || ($attributes['dataColumns'] ?? false);
-
-        $chart->config = array_merge($chart->config, $chart->createConfig([...$attributes,
-            'dataColumns' => $request->getDataColumns()])
-        );
-
-        if ($hasColumnsChanged) {
-            $chart->data = $chart->createData();
-        }
-
-        $chart->update($attributes);
-
-
-        return redirect(route('charts.show', ['chart' => $chart]));
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Chart $chart)

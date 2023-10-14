@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'file' => 'mimes:csv,txt|max:1048',
+            'file' => 'mimes:csv,txt|max:1024',
             'description' => 'nullable|string',
         ];
     }
