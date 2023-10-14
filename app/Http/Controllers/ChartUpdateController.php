@@ -47,4 +47,15 @@ class ChartUpdateController extends Controller
         $chart->update();
         return redirect(route('charts.show', ['chart' => $chart]));
     }
+
+    public function updateConfig(Request $request, Chart $chart)
+    {
+        $attributes = $request->validate([
+            'sectorLimit' => 'numeric|min:2|nullable',
+        ]);
+
+        $chart->config = array_merge($chart->config, $chart->createConfig($attributes));
+        $chart->update();
+        return redirect(route('charts.show', ['chart' => $chart]));
+    }
 }

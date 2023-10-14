@@ -146,7 +146,7 @@
                         required>
                         @foreach (\App\Enums\AggregationOption::cases() as $option)
                             <option value="{{ $option }}"
-                                @selected($option->value === (old('aggregationOption') ? old('aggregationOption') : $chart->config['aggregationOption']))>
+                                @selected($option->value === (old('aggregationOption') ? old('aggregationOption') : $chart->config['aggregationOption'] ?? null))>
                                 {{ ucwords($option->value) }}</option>
                         @endforeach
                     </select>
@@ -161,10 +161,11 @@
         <div>
             <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">Others</h2>
             @if (($chart->config['scaleType'] ?? null) === \App\Enums\ScaleType::Time->value)
-                <div class="mt-4 flex items-center justify-between">
+                <div class="mt-4 flex items-center justify-between rounded-md border p-4">
                     <div class="w-9/12">
                         <strong class="text-lg">Sort data by date</strong>
-                        <p class="text-sm">This will sort the chart data using date and will only work if the
+                        <p class="text-sm">This will sort the chart data using date and will only
+                            work if the
                             <strong>scale type</strong> is set to <strong>time</strong>
                         </p>
                     </div>
@@ -179,10 +180,11 @@
                 </div>
             @endif
 
-            <div class="mt-4 flex items-center justify-between">
+            <div class="mt-4 flex items-center justify-between rounded-md border p-4">
                 <div class="w-9/12">
                     <strong class="">Rebuild chart data</strong>
-                    <p class="text-sm">This is important if you update or change project data. Chart data is not
+                    <p class="text-sm">This is important if you update or change project data. Chart
+                        data is not
                         automatically changed in case of invalid columns in the new project
                         data.</strong>
                     </p>
@@ -190,7 +192,8 @@
                 </div>
 
 
-                <form method="POST" action="{{ route('charts.rebuildData', ['chart' => $chart]) }}">
+                <form method="POST"
+                    action="{{ route('charts.rebuildData', ['chart' => $chart]) }}">
                     @csrf
                     @method('PUT')
 
@@ -198,19 +201,23 @@
                 </form>
             </div>
 
-            {{-- <div class="mt-4">
+            @if ($chart->type === \App\Enums\ChartType::PieChart)
                 <form method="POST"
-                    action="{{ route('charts.config', ['chart' => $chart]) }}">
+                    action="{{ route('charts.updateConfig', ['chart' => $chart]) }}">
                     @csrf
                     @method('PUT')
 
-                    <x-input-label for="sectorLimit" :value="__('Sector Limit (leave blank for no limit)')" />
-                    <x-text-input id="sector-limit" class="mt-1 block w-full" type="number"
-                        name="sectorLimit"
-                        :value="old('sectorLimit') ?? ($chart->config['sectorLimit'] ?? '')" required autofocus autocomplete="name" />
-                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                    <div class="mt-4">
+                        <x-input-label for="sectorLimit" class="text-black" :value="__('Sector limit for pie chart (leave blank for no limit)')" />
+                        <input id="sectorLimit" class="mt-1" type="number" name="sectorLimit"
+                            value="{{ old('sectorLimit') ?? ($chart->config['sectorLimit'] ?? '') }}"
+                            min="2" max="{{ count($chart->data) }}" />
+                        <x-input-error :messages="$errors->get('sectorLimit')" class="mt-2" />
+                    </div>
+
+                    <x-primary-button class="mt-4">{{ __('Save') }}</x-primary-button>
                 </form>
-            </div> --}}
+            @endif
         </div>
 
     </div>

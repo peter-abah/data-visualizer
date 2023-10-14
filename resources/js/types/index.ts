@@ -15,11 +15,12 @@ export type ChartConfig = {
     categoryColumn: string;
     scaleType: ChartScale | null;
     dateFormat: string | null;
+    sectorLimit: string;
 };
 
 export type Project = {
     name: string;
-    id: number;
+    id: string;
 }
 
 export type Chart = {

@@ -16,28 +16,29 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 type Props = {
     chart: ChartType;
 };
-const CATEGORY_LIMIT = 6;
+
 export default function PieChart({ chart }: Props) {
     let { data, config } = chart;
 
     data = useMemo(() => {
-        if (data.length <= CATEGORY_LIMIT) return data;
+        const sectorLimit = +config.sectorLimit;
+        if (data.length <= sectorLimit) return data;
 
-        for (let i = CATEGORY_LIMIT; i < data.length; i++) {
+        for (let i = sectorLimit; i < data.length; i++) {
             for (let column of config.dataColumns) {
-                data[CATEGORY_LIMIT - 1][column] += data[i][column];
+                data[sectorLimit - 1][column] += data[i][column];
             }
         }
 
-        data[CATEGORY_LIMIT - 1][config.categoryColumn] = "Others";
-        return data.slice(0, CATEGORY_LIMIT);
+        data[sectorLimit - 1][config.categoryColumn] = "Others";
+        return data.slice(0, sectorLimit);
     }, [data, config]);
 
     const labels = useMemo(
         () =>
             data
                 .map((row) => row[config.categoryColumn])
-                .slice(0, CATEGORY_LIMIT),
+                .slice(0, +config.sectorLimit),
         [data, config]
     );
 

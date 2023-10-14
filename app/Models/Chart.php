@@ -28,6 +28,7 @@ class Chart extends Model
         'aggregationOption',
         'scaleType',
         'dateFormat',
+        'sectorLimit'
     ];
 
     protected bool $hasColumnsChanged = false;
