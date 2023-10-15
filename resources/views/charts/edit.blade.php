@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="mx-auto max-w-2xl">
+    <div class="mx-auto max-w-2xl pb-8">
         <div class="mb-6 flex items-start justify-between">
             <h1 class="text-2xl font-bold">Chart Settings</h1>
             <a href={{ route('charts.show', ['chart' => $chart]) }}
@@ -153,7 +153,7 @@
         </div>
 
 
-        <div>
+        <div class="mb-12">
             <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">Others</h2>
             @if (($chart->config['scaleType'] ?? null) === \App\Enums\ScaleType::Time->value)
                 <div class="mt-4 flex items-center justify-between rounded-md border p-4">
@@ -215,6 +215,38 @@
             @endif
         </div>
 
+        <div>
+            <div class="mt-4 flex items-center justify-between">
+                <div class="w-9/12">
+                    <strong>Delete chart</strong>
+                </div>
+                <x-danger-button class="normal-case" x-data
+                    x-on:click.prevent="$dispatch('open-modal', 'confirm-chart-deletion')">Delete</x-danger-button>
+
+                <x-modal name="confirm-chart-deletion" :show="false" focusable>
+                    <form method="post"
+                        action="{{ route('charts.destroy', ['chart' => $chart]) }}"
+                        class="p-6">
+                        @csrf
+                        @method('delete')
+
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                            {{ __('Are you sure you want to delete the chart?') }}
+                        </h2>
+
+                        <div class="mt-6 flex justify-end">
+                            <x-secondary-button class="normal-case" x-on:click="$dispatch('close')">
+                                {{ __('Cancel') }}
+                            </x-secondary-button>
+
+                            <x-danger-button class="ml-3 normal-case">
+                                {{ __('Delete Chart') }}
+                            </x-danger-button>
+                        </div>
+                </x-modal>
+                </form>
+            </div>
+        </div>
     </div>
 
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreChartRequest;
-use App\Http\Requests\UpdateChartRequest;
 use App\Models\Chart;
 use App\Models\Project;
 use App\Services\ChartService;
@@ -70,8 +69,10 @@ class ChartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Chart $chart)
+    public function destroy(Chart $chart): RedirectResponse
     {
-        //
+        $project = $chart->project;
+        $chart->delete();
+        return redirect(route('projects.show', ['project' => $project]));
     }
 }
