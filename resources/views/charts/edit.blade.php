@@ -1,7 +1,12 @@
 <x-app-layout>
     <div class="mx-auto max-w-2xl">
-        <h1 class="mb-6 text-2xl font-bold">Chart Settings</h1>
-        <div class="mb-8">
+        <div class="mb-6 flex items-start justify-between">
+            <h1 class="text-2xl font-bold">Chart Settings</h1>
+            <a href={{ route('charts.show', ['chart' => $chart]) }}
+                class="block w-[10rem] shrink-0 truncate underline hover:no-underline">/{{ $chart->name }}</a>
+        </div>
+
+        <div class="mb-12">
             <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">General</h2>
             <form x-data="{
                 columnsNo: 0,
@@ -21,8 +26,7 @@
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
-                <div class="mt-4"
-                    x-data="{ showFormatInput: {{ json_encode(($chart->config['scaleType'] ?? '') === 'time') }} }">
+                <div class="mt-4">
                     <x-input-label for="categoryColumn" :value="__('Category Column*')" />
 
                     <select name="categoryColumn" id="categoryColumn" required>
@@ -49,19 +53,10 @@
                                 @endforeach
                             </select>
                             {{--
-                                TODO: Show info on how to input date formats. Strings in ISO dates do not need a custom format
+                                TODO: Show info on how to input date formats. Only strings in ISO format are allowed
                             --}}
                         </div>
 
-                        <div class="mt-2 inline-flex items-center"
-                            x-cloak
-                            x-show="showFormatInput">
-                            <x-input-label for="dateFormat" :value="__('date format')"
-                                class="mr-2 text-sm" />
-                            <x-text-input type="text" name="dateFormat" id="dateFormat"
-                                class="text-sm" :value="old('dateFormat') ??
-                                    ($chart->config['dateFormat'] ?? '')" />
-                        </div>
                     </div>
 
                     <x-input-error :messages="$errors->get('categoryColumn')" />

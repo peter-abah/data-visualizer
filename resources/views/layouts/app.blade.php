@@ -22,7 +22,7 @@
         @include('layouts.navigation')
 
         <!-- Page Content -->
-        <main class="py-6 px-8">
+        <main class="py-6 px-12">
             {{ $slot }}
         </main>
     </div>

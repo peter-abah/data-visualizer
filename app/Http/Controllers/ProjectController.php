@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ChartType;
 use App\Http\Requests\Projects\StoreRequest;
 use App\Http\Requests\Projects\UpdateRequest;
 use App\Models\Project;
@@ -52,7 +53,12 @@ class ProjectController extends Controller
      */
     public function show(Project $project): View
     {
-        return view('projects.show', ['project' => $project]);
+        $chartIcons = [];
+        foreach (ChartType::cases() as $type) {
+            $chartIcons[$type->value] = "icons.{$type->value}";
+        }
+
+        return view('projects.show', ['project' => $project, 'chartIcons' => $chartIcons]);
     }
 
     /**

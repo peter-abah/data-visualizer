@@ -1,9 +1,9 @@
 <x-app-layout>
     <header class="mb-6 pb-4">
         <div class="flex items-center">
-            <h1 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-200">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-200">
                 {{ $project->name }}
-            </h1>
+            </h2>
 
             <div class="ml-auto flex justify-end gap-4">
                 <a href={{ route('projects.charts.create', $project) }}
@@ -42,13 +42,18 @@
         @else
             <div class="flex flex-col">
                 @foreach ($project->charts as $chart)
-                    <a href="{{ route('charts.show', ['chart' => $chart]) }}"
-                        class="border-b last:border-none hover:underline">
-                        <div class="flex items-center py-4">
-                            <h2 class="text-lg font-bold">{{ $chart->name }}</h2>
-                            <p class="ml-10 truncate text-sm">({{ $chart->type }})</p>
-                        </div>
-                    </a>
+                    <div class="py-4 border-b last:border-none">
+                        <h2 class="text-xl font-bold"><a
+                                href="{{ route('charts.show', ['chart' => $chart]) }}"
+                                class="hover:underline">{{ $chart->name }}</a>
+                        </h2>
+                        <p class="flex items-center gap-1">
+                            <x-dynamic-component
+                                :component="$chartIcons[$chart->type->value]" class="w-4" />
+                            <span
+                                class="text-sm">{{ str_replace('_', ' ', $chart->type->value) }}</span>
+                        </p>
+                    </div>
                 @endforeach
             </div>
         @endif
