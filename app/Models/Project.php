@@ -17,13 +17,6 @@ class Project extends Model
     ];
     public $fillable = ["name", "description"];
 
-    public function delete(): bool|null
-    {
-        // Delete file
-        Storage::delete($this->file_path);
-        return parent::delete();
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -32,5 +25,17 @@ class Project extends Model
     public function charts(): HasMany
     {
         return $this->hasMany(Chart::class);
+    }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        // Delete charts and data file on delete
+        static::deleting(function (Project $project) {
+            Storage::delete($project->file_path);
+            $project->charts()->delete();
+        });
     }
 }

@@ -33,5 +33,40 @@
                     class="ml-4">{{ __('Cancel') }}</a>
             </div>
         </form>
+
+        <div class="mt-12 p-6 mb-8 border-t flex items-center justify-between">
+            <div class="w-9/12">
+                <strong>Delete Project</strong>
+            </div>
+            <x-danger-button class="normal-case" x-data
+                x-on:click.prevent="$dispatch('open-modal', 'confirm-project-deletion')">Delete</x-danger-button>
+
+            <x-modal name="confirm-project-deletion" :show="false" focusable>
+                <form method="post"
+                    action="{{ route('projects.destroy', ['project' => $project]) }}"
+                    class="p-6">
+                    @csrf
+                    @method('delete')
+
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        {{ __('Are you sure you want to delete the project?') }}
+                    </h2>
+
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        {{ __('This will also delete all charts belonging to the project.') }}
+                    </p>
+
+                    <div class="mt-6 flex justify-end">
+                        <x-secondary-button class="normal-case" x-on:click="$dispatch('close')">
+                            {{ __('Cancel') }}
+                        </x-secondary-button>
+
+                        <x-danger-button class="ml-3 normal-case">
+                            {{ __('Delete Project') }}
+                        </x-danger-button>
+                    </div>
+            </x-modal>
+            </form>
+        </div>
     </div>
 </x-app-layout>

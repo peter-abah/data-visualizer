@@ -53,4 +53,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Chart::class);
     }
+
+    protected static function booted(): void
+    {
+        // Delete projects on delete
+        static::deleting(function (User $user) {
+            $user->projects()->delete();
+        });
+    }
 }
