@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="mx-auto max-w-2xl pb-8">
+    <div class="max-w-2xl pb-8">
         <div class="mb-6 flex items-start justify-between">
             <h1 class="text-2xl font-bold">Chart Settings</h1>
             <a href={{ route('charts.show', ['chart' => $chart]) }}
@@ -7,12 +7,11 @@
         </div>
 
         <div class="mb-12">
-            <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">General</h2>
             <form x-data="{
                 columnsNo: 0,
                 removedColumns: {},
-                chartColumns: JSON.parse('{{ json_encode($chart->config['dataColumns']) }}'),
-                showScaleTypeInput: {{ json_encode($chart->type->isCartesian()) }}
+                chartColumns: @js($chart->config['dataColumns']),
+                showScaleTypeInput: @js($chart->type->isCartesian())
             }"
                 method="POST"
                 action="{{ route('charts.update', ['chart' => $chart]) }}">
@@ -26,7 +25,7 @@
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
-                <div class="mt-4">
+                <div class="mt-4" x-data="{ showTimeInfo: @js(\App\Enums\ScaleType::Time->value === ($chart->config['scaleType'] ?? null)) }">
                     <x-input-label for="categoryColumn" :value="__('Category Column*')" />
 
                     <select name="categoryColumn" id="categoryColumn" required>
@@ -45,19 +44,21 @@
                         <div class="inline-flex items-center">
                             <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
                             <select name="scaleType" id="scaleType" required class="text-sm"
-                                x-on:change="showFormatInput = $event.target.value === '{{ \App\Enums\ScaleType::Time->value }}'">
+                                x-on:change="showTimeInfo = $event.target.value === @js(\App\Enums\ScaleType::Time->value)">
                                 @foreach (\App\Enums\ScaleType::cases() as $option)
                                     <option value="{{ $option->value }}"
                                         @selected($option->value === (old('scaleType') ? old('scaleType') : $chart->config['scaleType'] ?? ''))>
                                         {{ ucfirst($option->value) }}</option>
                                 @endforeach
                             </select>
-                            {{--
-                                TODO: Show info on how to input date formats. Only strings in ISO format are allowed
-                            --}}
                         </div>
 
                     </div>
+
+                    {{-- TODO: Add link explaining date formats --}}
+                    <p x-show="showTimeInfo" x-cloak class="mt-2 text-sm">Category column for
+                        date/time charts should be in <strong>ISO format</strong>. Some components can
+                        be omited see: <strong>todo link here</strong></p>
 
                     <x-input-error :messages="$errors->get('categoryColumn')" />
                 </div>
@@ -132,7 +133,20 @@
                     </div>
                 </div>
 
-                <div class="mt-6">
+                <x-primary-button class="ml-auto mt-4 !flex">{{ __('Save') }}</x-primary-button>
+            </form>
+        </div>
+
+
+        <div class="mb-12">
+            <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">Others</h2>
+
+            <form method="POST" class="mb-8"
+                action="{{ route('charts.updateConfig', ['chart' => $chart]) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="mt-6 flex flex-wrap items-center gap-2">
                     <x-input-label for="aggregationOption"
                         :value="__('Aggregation option')" />
 
@@ -141,22 +155,28 @@
                         required>
                         @foreach (\App\Enums\AggregationOption::cases() as $option)
                             <option value="{{ $option }}"
-                                @selected($option->value === (old('aggregationOption') ? old('aggregationOption') : $chart->config['aggregationOption'] ?? null))>
+                                @selected($option->value === (old('aggregationOption') ? old('aggregationOption') : $chart->config['aggregationOption'] ?? \App\Enums\AggregationOption::Sum->value))>
                                 {{ ucwords($option->value) }}</option>
                         @endforeach
                     </select>
                     <x-input-error :messages="$errors->get('aggregationOption')" />
                 </div>
 
-                <x-primary-button class="mt-4">{{ __('Save') }}</x-primary-button>
+                @if ($chart->type === \App\Enums\ChartType::PieChart)
+                    <div class="mt-4 flex flex-wrap items-center gap-2">
+                        <x-input-label for="sectorLimit" class="text-black" :value="__('Sector limit for pie chart (leave blank for no limit)')" />
+                        <input id="sectorLimit" class="mt-1" type="number" name="sectorLimit"
+                            value="{{ old('sectorLimit') ?? ($chart->config['sectorLimit'] ?? '') }}"
+                            min="2" max="{{ count($chart->data) }}" />
+                        <x-input-error :messages="$errors->get('sectorLimit')" class="mt-2" />
+                    </div>
+                @endif
+
+                <x-primary-button class="ml-auto mt-4 !flex">{{ __('Save') }}</x-primary-button>
             </form>
-        </div>
 
-
-        <div class="mb-12">
-            <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">Others</h2>
             @if (($chart->config['scaleType'] ?? null) === \App\Enums\ScaleType::Time->value)
-                <div class="mt-4 flex items-center justify-between rounded-md border p-4">
+                <div class="mb-8 flex items-center justify-between rounded-md border p-4">
                     <div class="w-9/12">
                         <strong class="text-lg">Sort data by date</strong>
                         <p class="text-sm">This will sort the chart data using date and will only
@@ -175,10 +195,11 @@
                 </div>
             @endif
 
-            <div class="mt-4 flex items-center justify-between rounded-md border p-4">
+            <div class="mb-8 flex items-center justify-between rounded-md border p-4">
                 <div class="w-9/12">
                     <strong class="">Rebuild chart data</strong>
-                    <p class="text-sm">This is important if you update or change project data. Chart
+                    <p class="text-sm">This is important if you update or change project data.
+                        Chart
                         data is not
                         automatically changed in case of invalid columns in the new project
                         data.</strong>
@@ -195,57 +216,41 @@
                     <x-primary-button>Rebuild data</x-primary-button>
                 </form>
             </div>
-
-            @if ($chart->type === \App\Enums\ChartType::PieChart)
-                <form method="POST"
-                    action="{{ route('charts.updateConfig', ['chart' => $chart]) }}">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="mt-4">
-                        <x-input-label for="sectorLimit" class="text-black" :value="__('Sector limit for pie chart (leave blank for no limit)')" />
-                        <input id="sectorLimit" class="mt-1" type="number" name="sectorLimit"
-                            value="{{ old('sectorLimit') ?? ($chart->config['sectorLimit'] ?? '') }}"
-                            min="2" max="{{ count($chart->data) }}" />
-                        <x-input-error :messages="$errors->get('sectorLimit')" class="mt-2" />
-                    </div>
-
-                    <x-primary-button class="mt-4">{{ __('Save') }}</x-primary-button>
-                </form>
-            @endif
         </div>
 
-        <div>
-            <div class="mt-4 flex items-center justify-between">
-                <div class="w-9/12">
-                    <strong>Delete chart</strong>
-                </div>
-                <x-danger-button class="normal-case" x-data
-                    x-on:click.prevent="$dispatch('open-modal', 'confirm-chart-deletion')">Delete</x-danger-button>
-
-                <x-modal name="confirm-chart-deletion" :show="false" focusable>
-                    <form method="post"
-                        action="{{ route('charts.destroy', ['chart' => $chart]) }}"
-                        class="p-6">
-                        @csrf
-                        @method('delete')
-
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Are you sure you want to delete the chart?') }}
-                        </h2>
-
-                        <div class="mt-6 flex justify-end">
-                            <x-secondary-button class="normal-case" x-on:click="$dispatch('close')">
-                                {{ __('Cancel') }}
-                            </x-secondary-button>
-
-                            <x-danger-button class="ml-3 normal-case">
-                                {{ __('Delete Chart') }}
-                            </x-danger-button>
-                        </div>
-                </x-modal>
-                </form>
+        <div class="flex items-center justify-between px-4">
+            <div class="w-9/12">
+                <strong>Delete chart</strong>
             </div>
+            <x-danger-button class="normal-case" x-data
+                x-on:click.prevent="$dispatch('open-modal', 'confirm-chart-deletion')">Delete</x-danger-button>
+
+            <x-modal name="confirm-chart-deletion" :show="false" focusable>
+                <form method="post"
+                    action="{{ route('charts.destroy', ['chart' => $chart]) }}"
+                    class="p-6">
+                    @csrf
+                    @method('delete')
+
+                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        {{ __('Are you sure you want to delete the chart?') }}
+                    </h2>
+
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        {{ __('This action cannot be reversed') }}</p>
+
+                    <div class="mt-6 flex justify-end">
+                        <x-secondary-button class="normal-case"
+                            x-on:click="$dispatch('close')">
+                            {{ __('Cancel') }}
+                        </x-secondary-button>
+
+                        <x-danger-button class="ml-3 normal-case">
+                            {{ __('Delete Chart') }}
+                        </x-danger-button>
+                    </div>
+            </x-modal>
+            </form>
         </div>
     </div>
 

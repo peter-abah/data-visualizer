@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="mx-auto max-w-2xl">
+    <div class="max-w-2xl">
         <h1 class="mb-6 text-xl font-bold">Create Chart</h1>
         <form x-data="{ columnsNo: 0, showScaleTypeInput: false }" method="POST"
             action="{{ route('projects.charts.store', ['project' => $project]) }}">
@@ -16,7 +16,7 @@
             <div class="mt-4">
                 <x-input-label for="type" :value="__('Chart type*')" />
                 <select name="type" id="type" required
-                    x-on:change="showScaleTypeInput = JSON.parse('{{ json_encode(\App\Enums\ChartType::getCartesianTypes()) }}').includes($event.target.value)">
+                    x-on:change="showScaleTypeInput = @js(\App\Enums\ChartType::getCartesianTypes()).includes($event.target.value)">
                     <option value="">{{ __('--Select an option--') }}</option>
                     @foreach (\App\Enums\ChartType::cases() as $type)
                         <option value="{{ $type->value }}" @selected($type->value === old('type'))>
@@ -26,7 +26,7 @@
                 <x-input-error :messages="$errors->get('type')" />
             </div>
 
-            <div class="mt-4" x-data="{ showFormatInput: false }">
+            <div class="mt-4" x-data="{ showTimeInfo: false }">
                 <x-input-label for="categoryColumn" :value="__('Category Column*')" />
 
                 <select name="categoryColumn" id="categoryColumn" required>
@@ -41,28 +41,24 @@
                     <div class="inline-flex items-center">
                         <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
                         <select name="scaleType" id="scaleType" required class="text-sm"
-                            x-on:change="showFormatInput = $event.target.value === '{{ \App\Enums\ScaleType::Time->value }}'">
+                            x-on:change="showTimeInfo = $event.target.value === '{{ \App\Enums\ScaleType::Time->value }}'">
                             @foreach (\App\Enums\ScaleType::cases() as $option)
                                 <option value="{{ $option->value }}" @selected(old('scaleType') ? $option->value === old('scaleType') : $option === \App\Enums\ScaleType::Category)>
                                     {{ ucfirst($option->value) }}</option>
                             @endforeach
                         </select>
-                        {{--
-                            TODO: Show info on how to input date formats. Strings in ISO dates do not need a custom format
-                        --}}
-                    </div>
-
-                    <div class="mt-2 inline-flex items-center" x-cloak x-show="showFormatInput">
-                        <x-input-label for="dateFormat" :value="__('date format')" class="mr-2 text-sm" />
-                        <x-text-input type="text" name="dateFormat" id="dateFormat"
-                            class="text-sm" />
                     </div>
                 </div>
+
+                {{-- TODO: Add link explaining date formats --}}
+                <p x-show="showTimeInfo" x-cloak class="mt-2 text-sm">Category column for date/time
+                    charts should be in <strong>ISO format</strong>. Some components can
+                    be omited see: <strong>todo link here</strong></p>
 
                 <x-input-error :messages="$errors->get('categoryColumn')" />
             </div>
 
-            <div x-data="{ isVisible: true }" class="mt-6">
+            <div x-data="{ isVisible: true }" class="mb-8 mt-6">
                 <div class="flex">
                     <p class="font-bold">Data Columns</p>
                     <button type="button" @click="isVisible = !isVisible" class="px-2">
@@ -116,21 +112,10 @@
                 </div>
             </div>
 
-            <div class="mt-6">
-                <x-input-label for="aggregationOption" :value="__('Aggregation option')" />
-
-                <select name="aggregationOption" id="aggregationOption" required>
-                    @foreach (\App\Enums\AggregationOption::cases() as $option)
-                        <option value="{{ $option }}" @selected(old('aggregationOption') ? $option->value === old('aggregationOption') : $option === \App\Enums\AggregationOption::Sum)>
-                            {{ ucwords($option->value) }}</option>
-                    @endforeach
-                </select>
-                <x-input-error :messages="$errors->get('aggregationOption')" />
-            </div>
-
             <div class="mt-4 flex items-center justify-end">
                 <x-primary-button>{{ __('Save') }}</x-primary-button>
-                <a href="{{ route('dashboard') }}" class="ml-4">{{ __('Cancel') }}</a>
+                <a href="{{ route('projects.show', $project) }}"
+                    class="ml-4">{{ __('Cancel') }}</a>
             </div>
         </form>
     </div>

@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="mx-auto max-w-2xl">
+    <div class="max-w-2xl">
         <h1 class="mb-6 text-xl font-bold">Create Project</h1>
         <form method="POST" action="{{ route('projects.store') }}" enctype="multipart/form-data">
             @csrf
@@ -22,7 +22,7 @@
             </div>
 
             <div class="mt-4">
-                <x-input-label for="description" class="mb-1" :value="__('File* (Select CSV containing data)')" />
+                <x-input-label for="description" class="mb-1" :value="__('Data File* (Select CSV containing data)')" />
                 <input type="file" id="file" name="file" accept=".txt,text/csv"
                     required />
                 <x-input-error :messages="$errors->get('file')" />

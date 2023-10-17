@@ -1,12 +1,12 @@
 <x-app-layout>
     <header class="flex items-center">
         <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-200">
-            {{ __('Projects') }}
+            {{ __('Dashboard') }}
         </h2>
 
         <a href={{ route('projects.create') }}
             class="ml-auto rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50">
-            Create Project
+            {{ 'Create Project' }}
         </a>
     </header>
 
@@ -24,7 +24,8 @@
                 @foreach ($projects as $project)
                     <a href="{{ route('projects.show', ['project' => $project]) }}">
                         <div class="rounded-lg border p-6 hover:bg-gray-50">
-                            <h2 class="mb-4 text-lg font-bold flex items-center gap-2"><x-icons.dataset class="fill-gray-800 w-5" />
+                            <h2 class="mb-4 flex items-center gap-2 text-lg font-bold">
+                                <x-icons.dataset class="w-5 fill-gray-800" />
                                 {{ $project->name }}</h2>
                             <p class="truncate text-sm">
                                 {{ $project->description ?? 'No description' }}</p>

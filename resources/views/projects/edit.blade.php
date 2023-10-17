@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="mx-auto max-w-2xl">
+    <div class="max-w-2xl">
         <h1 class="mb-6 text-xl font-bold">Project Settings</h1>
         <form method="POST" action="{{ route('projects.update', $project) }}"
             enctype="multipart/form-data">

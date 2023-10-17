@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\AggregationOption;
 use App\Rules\ColumnInProject;
 use App\Rules\ColumnIsNumeric;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
 class StoreChartRequest extends FormRequest
 {
@@ -31,9 +29,7 @@ class StoreChartRequest extends FormRequest
             'dataColumns' => 'array|required|min:1|max:3',
             'dataColumns.*' => ['required', 'string', 'max:255', new ColumnInProject($this->project), new ColumnIsNumeric($this->project)],
             'type' => 'required',
-            'aggregationOption' => ['required', new Enum(AggregationOption::class)],
             'scaleType' => 'nullable|string',
-            'dateFormat' => 'nullable|string',
         ];
     }
 }

@@ -18,7 +18,6 @@ import { COLORS } from "../constants";
 import {
     getCartesianChartOptions,
     getGeneralChartOptions,
-    getTimeScaleOptions,
 } from "../chartOptions";
 import { merge } from "chart.js/helpers";
 
@@ -60,9 +59,6 @@ export function getLineChartOptions(chart: ChartType) {
     let options = getGeneralChartOptions(chart);
     options = merge(options, getCartesianChartOptions(chart));
 
-    if (chart.config.scaleType === "time") {
-        options = merge(options, getTimeScaleOptions(chart));
-    }
 
     return options as ChartOptions<"line">;
 }

@@ -27,17 +27,6 @@ export function getCartesianChartOptions(chart: Chart): ChartOptions {
     };
 }
 
-export function getTimeScaleOptions(chart: Chart): ChartOptions {
-    return {
-        scales: {
-            x: {
-                type: "time",
-                time: { parser: chart.config.dateFormat || undefined },
-            },
-        },
-    };
-}
-
 export function isChartCartesian(chart: Chart) {
     return CARTESAIN_CHART_TYPES.includes(chart.type);
 }

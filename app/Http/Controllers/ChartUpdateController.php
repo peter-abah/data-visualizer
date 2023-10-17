@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateChartRequest;
 use App\Models\Chart;
 use App\Services\ChartService;
+use App\Enums\AggregationOption;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Enum;
 
 class ChartUpdateController extends Controller
 {
@@ -52,6 +54,7 @@ class ChartUpdateController extends Controller
     {
         $attributes = $request->validate([
             'sectorLimit' => 'numeric|min:2|nullable',
+            'aggregationOption' => ['required', new Enum(AggregationOption::class)],
         ]);
 
         $chart->config = array_merge($chart->config, $chart->createConfig($attributes));

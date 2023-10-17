@@ -27,7 +27,6 @@ class Chart extends Model
         'categoryColumn',
         'aggregationOption',
         'scaleType',
-        'dateFormat',
         'sectorLimit'
     ];
 

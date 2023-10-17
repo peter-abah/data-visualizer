@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\AggregationOption;
 use App\Rules\ColumnInProject;
 use App\Rules\ColumnIsNumeric;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Validator;
 
 class UpdateChartRequest extends FormRequest
@@ -14,7 +12,6 @@ class UpdateChartRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    // TODO: Write proper authorization logic
     public function authorize(): bool
     {
         return true;
@@ -33,9 +30,7 @@ class UpdateChartRequest extends FormRequest
             'dataColumns' => 'array',
             'dataColumns.*' => ['string', 'max:255', new ColumnInProject($this->chart->project),
                 new ColumnIsNumeric($this->chart->project)],
-            'aggregationOption' => ['required', new Enum(AggregationOption::class)],
             'scaleType' => 'nullable|string',
-            'dateFormat' => 'nullable|string',
             'removedColumns' => 'array',
             'removedColumns.*' => 'string|max:255',
         ];
