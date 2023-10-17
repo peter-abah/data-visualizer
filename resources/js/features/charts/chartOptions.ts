@@ -16,6 +16,10 @@ export function getCartesianChartOptions(chart: Chart): ChartOptions {
                 title: {
                     display: true,
                     text: chart.config.categoryColumn,
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
                 },
             },
         },

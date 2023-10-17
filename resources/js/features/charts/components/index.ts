@@ -1,4 +1,15 @@
-export { default as LineChart } from "./line_chart";
-export { default as BarChart } from "./bar_chart";
-export { default as PieChart } from "./pie_chart";
-export { default as RadarChart } from "./radar_chart";
+import { ChartTypeEnum } from "@/types";
+
+import LineChart from "./line_chart";
+import BarChart from "./bar_chart";
+import PieChart from "./pie_chart";
+import RadarChart from "./radar_chart";
+
+export const chartTypeToComponent = {
+    [ChartTypeEnum.Line]: LineChart,
+    [ChartTypeEnum.Bar]: BarChart,
+    [ChartTypeEnum.Pie]: PieChart,
+    [ChartTypeEnum.Radar]: RadarChart,
+};
+
+export { LineChart, BarChart, PieChart, RadarChart };

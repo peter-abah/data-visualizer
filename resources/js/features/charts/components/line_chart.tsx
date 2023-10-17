@@ -1,4 +1,4 @@
-import { CartesianScale, Chart as ChartType } from "@/types";
+import { Chart as ChartType } from "@/types";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -58,7 +58,7 @@ export default function LineChart({ chart }: Props) {
 
 export function getLineChartOptions(chart: ChartType) {
     let options = getGeneralChartOptions(chart);
-    options = merge(options, getCartesianChartOptions);
+    options = merge(options, getCartesianChartOptions(chart));
 
     if (chart.config.scaleType === "time") {
         options = merge(options, getTimeScaleOptions(chart));

@@ -22,7 +22,7 @@
         @include("layouts.navigation")
 
         <!-- Page Content -->
-        <main class="py-6 px-12">
+        <main class="p-6 sm:py-6 sm:px-12 ">
             @inertia
         </main>
     </div>
