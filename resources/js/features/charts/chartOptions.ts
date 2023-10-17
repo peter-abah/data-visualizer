@@ -14,12 +14,13 @@ export function getCartesianChartOptions(chart: Chart): ChartOptions {
             x: {
                 type: xScale,
                 title: {
+                    color: "black",
                     display: true,
                     text: chart.config.categoryColumn,
                     font: {
                         size: 16,
-                        weight: 'bold'
-                    }
+                        weight: "bold",
+                    },
                 },
             },
         },

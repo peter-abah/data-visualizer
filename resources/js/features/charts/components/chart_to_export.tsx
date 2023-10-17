@@ -6,13 +6,21 @@ type Props = {
     chart: ChartType;
 };
 
-const ChartToExport = forwardRef(
+type TChartToExport = ReturnType<typeof forwardRef<HTMLDivElement, Props>> & {
+    selector?: string;
+};
+
+const ChartToExport: TChartToExport = forwardRef(
     ({ chart }: Props, ref: ForwardedRef<HTMLDivElement>) => {
         const ChartComponent = chartTypeToComponent[chart.type];
 
         return (
             <div className="fixed left-[9999px]">
-                <div className="bg-white p-8 w-[1024px]" id="chart" ref={ref}>
+                <div
+                    className="bg-white p-8 w-[1024px] mx-auto print:py-16"
+                    id="chart-to-export"
+                    ref={ref}
+                >
                     <header className="mb-4">
                         <h1 className="text-center text-xl font-bold">
                             {chart.name}
@@ -27,5 +35,7 @@ const ChartToExport = forwardRef(
         );
     }
 );
+
+ChartToExport.selector = "#chart-to-export";
 
 export default ChartToExport;

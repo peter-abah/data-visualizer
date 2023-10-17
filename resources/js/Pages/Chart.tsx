@@ -1,7 +1,10 @@
 import { Chart as ChartType } from "@/types";
 import { useToJpeg } from "@hugocxl/react-to-image";
+import { useReactToPrint } from "react-to-print";
 import { chartTypeToComponent } from "@/features/charts/components";
 import ChartToExport from "@/features/charts/components/chart_to_export";
+import { useRef } from "react";
+import Dropdown, { DropdownButton } from "@/components/dropdown";
 
 type Props = {
     chart: ChartType;
@@ -10,8 +13,9 @@ type Props = {
 };
 
 export default function Chart({ chart, linkToProject, linkToSettings }: Props) {
-    const ChartComponent = chartTypeToComponent[chart.type];
-    const [_, convertToImage, ref] = useToJpeg<HTMLDivElement>({
+    const ref = useRef<HTMLDivElement>(null);
+    const [_, convertToImage] = useToJpeg<HTMLDivElement>({
+        selector: ChartToExport.selector,
         onSuccess: (data) => {
             const link = document.createElement("a");
             link.download = "chart.jpeg";
@@ -19,6 +23,12 @@ export default function Chart({ chart, linkToProject, linkToSettings }: Props) {
             link.click();
         },
     });
+
+    const handlePrint = useReactToPrint({
+        content: () => ref.current,
+    });
+
+    const ChartComponent = chartTypeToComponent[chart.type];
 
     return (
         <div className="overflow-x-hidden">
@@ -39,12 +49,21 @@ export default function Chart({ chart, linkToProject, linkToSettings }: Props) {
                 </div>
 
                 <div className="flex gap-2">
-                    <button
-                        className="ml-auto px-4 py-2 rounded-md text-sm font-medium border whitespace-nowrap hover:bg-slate-50"
-                        onClick={convertToImage}
+                    <Dropdown
+                        trigger={
+                            <button className="ml-auto px-4 py-2 rounded-md text-sm font-medium border whitespace-nowrap hover:bg-slate-50">
+                                Export chart
+                            </button>
+                        }
                     >
-                        Export chart
-                    </button>
+                        <DropdownButton onClick={handlePrint}>
+                            To pdf
+                        </DropdownButton>
+                        <DropdownButton onClick={convertToImage}>
+                            To image
+                        </DropdownButton>
+                    </Dropdown>
+
                     <a
                         href={linkToSettings}
                         className="px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50"
