@@ -1,11 +1,11 @@
 <x-app-layout>
     <header class="mb-6 pb-4">
-        <div class="flex items-center">
-            <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-200">
+        <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 mb-4">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-800">
                 {{ $project->name }}
             </h2>
 
-            <div class="ml-auto flex justify-end gap-4">
+            <div class="flex justify-end gap-4">
                 <a href={{ route('projects.charts.create', $project) }}
                     class="rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50">
                     Create chart
@@ -15,15 +15,10 @@
                     class="rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50">
                     Settings
                 </a>
-
-                {{-- <a href="#"
-                    class="rounded-md bg-red-500 px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-red-700">
-                    Delete Project
-                </a> --}}
             </div>
         </div>
 
-        <p class="text-gray-500 dark:text-gray-300">
+        <p class="text-gray-500">
             {{ $project->description ?? 'No description' }}
         </p>
     </header>

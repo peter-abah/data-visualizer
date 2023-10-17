@@ -37,7 +37,7 @@ export default function Dropdown({ trigger, children, contentClasses }: Props) {
                 onClick={() => setOpen(false)}
             >
                 <div
-                    className={`rounded-md ring-1 ring-black ring-opacity-5 ${contentClasses}`}
+                    className={`rounded-md ring-1 ring-black ring-opacity-5 bg-white z-50 ${contentClasses}`}
                 >
                     {children}
                 </div>

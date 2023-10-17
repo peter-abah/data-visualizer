@@ -29,24 +29,27 @@
             <div class="mt-4" x-data="{ showTimeInfo: false }">
                 <x-input-label for="categoryColumn" :value="__('Category Column*')" />
 
-                <select name="categoryColumn" id="categoryColumn" required>
-                    <option value="">{{ __('--Select an option--') }}</option>
-                    @foreach ($project->columns as $column)
-                        <option value="{{ $column }}" @selected($column === old('categoryColumn'))>
-                            {{ $column }}</option>
-                    @endforeach
-                </select>
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <select name="categoryColumn" id="categoryColumn" required>
+                        <option value="">{{ __('--Select an option--') }}</option>
+                        @foreach ($project->columns as $column)
+                            <option value="{{ $column }}" @selected($column === old('categoryColumn'))>
+                                {{ $column }}</option>
+                        @endforeach
+                    </select>
 
-                <div class="ml-4 inline-flex flex-col" x-cloak x-show="showScaleTypeInput">
-                    <div class="inline-flex items-center">
-                        <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
-                        <select name="scaleType" id="scaleType" required class="text-sm"
-                            x-on:change="showTimeInfo = $event.target.value === '{{ \App\Enums\ScaleType::Time->value }}'">
-                            @foreach (\App\Enums\ScaleType::cases() as $option)
-                                <option value="{{ $option->value }}" @selected(old('scaleType') ? $option->value === old('scaleType') : $option === \App\Enums\ScaleType::Category)>
-                                    {{ ucfirst($option->value) }}</option>
-                            @endforeach
-                        </select>
+                    <div class="inline-flex flex-col" x-cloak x-show="showScaleTypeInput">
+                        <div class="inline-flex items-center">
+                            <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
+                            <select name="scaleType" id="scaleType" required class="text-sm"
+                                x-on:change="showTimeInfo = $event.target.value === '{{ \App\Enums\ScaleType::Time->value }}'">
+                                @foreach (\App\Enums\ScaleType::cases() as $option)
+                                    <option value="{{ $option->value }}"
+                                        @selected(old('scaleType') ? $option->value === old('scaleType') : $option === \App\Enums\ScaleType::Category)>
+                                        {{ ucfirst($option->value) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
 

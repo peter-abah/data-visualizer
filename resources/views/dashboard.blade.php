@@ -1,11 +1,11 @@
 <x-app-layout>
-    <header class="flex items-center">
-        <h2 class="text-3xl font-bold tracking-tight text-gray-800 dark:text-gray-200">
+    <header class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-3xl font-bold tracking-tight text-gray-800">
             {{ __('Dashboard') }}
         </h2>
 
         <a href={{ route('projects.create') }}
-            class="ml-auto rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50">
+            class="rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50">
             {{ 'Create Project' }}
         </a>
     </header>
@@ -26,7 +26,8 @@
                         <div class="rounded-lg border p-6 hover:bg-gray-50">
                             <h2 class="mb-4 flex items-center gap-2 text-lg font-bold">
                                 <x-icons.dataset class="w-5 fill-gray-800" />
-                                {{ $project->name }}</h2>
+                                <span class="truncate">{{ $project->name }}</span>
+                            </h2>
                             <p class="truncate text-sm">
                                 {{ $project->description ?? 'No description' }}</p>
                         </div>

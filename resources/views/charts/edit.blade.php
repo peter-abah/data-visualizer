@@ -28,36 +28,39 @@
                 <div class="mt-4" x-data="{ showTimeInfo: @js(\App\Enums\ScaleType::Time->value === ($chart->config['scaleType'] ?? null)) }">
                     <x-input-label for="categoryColumn" :value="__('Category Column*')" />
 
-                    <select name="categoryColumn" id="categoryColumn" required>
-                        <option value="">{{ __('--Select an option--') }}
-                        </option>
-                        @foreach ($chart->project->columns as $column)
-                            <option value="{{ $column }}"
-                                @selected($column === (old('categoryColumn') ? old('categoryColumn') : $chart->config['categoryColumn']))>
-                                {{ $column }}</option>
-                        @endforeach
-                    </select>
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <select name="categoryColumn" id="categoryColumn" required>
+                            <option value="">{{ __('--Select an option--') }}
+                            </option>
+                            @foreach ($chart->project->columns as $column)
+                                <option value="{{ $column }}"
+                                    @selected($column === (old('categoryColumn') ? old('categoryColumn') : $chart->config['categoryColumn']))>
+                                    {{ $column }}</option>
+                            @endforeach
+                        </select>
 
-                    <div class="ml-4 inline-flex flex-col"
-                        x-cloak
-                        x-show="showScaleTypeInput">
-                        <div class="inline-flex items-center">
-                            <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
-                            <select name="scaleType" id="scaleType" required class="text-sm"
-                                x-on:change="showTimeInfo = $event.target.value === @js(\App\Enums\ScaleType::Time->value)">
-                                @foreach (\App\Enums\ScaleType::cases() as $option)
-                                    <option value="{{ $option->value }}"
-                                        @selected($option->value === (old('scaleType') ? old('scaleType') : $chart->config['scaleType'] ?? ''))>
-                                        {{ ucfirst($option->value) }}</option>
-                                @endforeach
-                            </select>
+                        <div class="inline-flex flex-col"
+                            x-cloak
+                            x-show="showScaleTypeInput">
+                            <div class="inline-flex items-center">
+                                <x-input-label for="scaleType" :value="__('scale type')"
+                                    class="mr-2 text-sm" />
+                                <select name="scaleType" id="scaleType" required class="text-sm"
+                                    x-on:change="showTimeInfo = $event.target.value === @js(\App\Enums\ScaleType::Time->value)">
+                                    @foreach (\App\Enums\ScaleType::cases() as $option)
+                                        <option value="{{ $option->value }}"
+                                            @selected($option->value === (old('scaleType') ? old('scaleType') : $chart->config['scaleType'] ?? ''))>
+                                            {{ ucfirst($option->value) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-
                     </div>
 
                     {{-- TODO: Add link explaining date formats --}}
                     <p x-show="showTimeInfo" x-cloak class="mt-2 text-sm">Category column for
-                        date/time charts should be in <strong>ISO format</strong>. Some components can
+                        date/time charts should be in <strong>ISO format</strong>. Some components
+                        can
                         be omited see: <strong>todo link here</strong></p>
 
                     <x-input-error :messages="$errors->get('categoryColumn')" />
@@ -176,8 +179,9 @@
             </form>
 
             @if (($chart->config['scaleType'] ?? null) === \App\Enums\ScaleType::Time->value)
-                <div class="mb-8 flex items-center justify-between rounded-md border p-4">
-                    <div class="w-9/12">
+                <div
+                    class="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-md border p-4 sm:flex-nowrap">
+                    <div>
                         <strong class="text-lg">Sort data by date</strong>
                         <p class="text-sm">This will sort the chart data using date and will only
                             work if the
@@ -190,13 +194,14 @@
                         @csrf
                         @method('PUT')
 
-                        <x-primary-button>Sort data</x-primary-button>
+                        <x-primary-button class="w-max">Sort data</x-primary-button>
                     </form>
                 </div>
             @endif
 
-            <div class="mb-8 flex items-center justify-between rounded-md border p-4">
-                <div class="w-9/12">
+            <div
+                class="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-md border p-4 sm:flex-nowrap">
+                <div>
                     <strong class="">Rebuild chart data</strong>
                     <p class="text-sm">This is important if you update or change project data.
                         Chart
@@ -213,7 +218,7 @@
                     @csrf
                     @method('PUT')
 
-                    <x-primary-button>Rebuild data</x-primary-button>
+                    <x-primary-button class="w-max">Rebuild data</x-primary-button>
                 </form>
             </div>
         </div>
