@@ -3,6 +3,7 @@ export enum ChartTypeEnum {
     Bar = "bar_chart",
     Pie = "pie_chart",
     Radar = "radar_chart",
+    Scatter = "scatter_chart",
 }
 
 export type ChartType = `${ChartTypeEnum}`;
@@ -21,7 +22,7 @@ export type ChartConfig = {
 export type Project = {
     name: string;
     id: string;
-}
+};
 
 export type Chart = {
     name: string;

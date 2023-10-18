@@ -122,7 +122,7 @@
 
 
                         <div class="mt-4 flex gap-4">
-                            <x-primary-button type="button" @click="columnsNo++"
+                            <x-primary-button type="button" @click="columnsNo++" x-cloak
                                 x-show="(columnsNo + chartColumns.length - Object.keys(removedColumns).length) < 3 ">
                                 {{ __('Add data column') }}</x-primary-button>
                             <x-primary-button type="button" @click="columnsNo--" x-cloak

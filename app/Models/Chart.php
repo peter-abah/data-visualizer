@@ -27,7 +27,7 @@ class Chart extends Model
         'categoryColumn',
         'aggregationOption',
         'scaleType',
-        'sectorLimit'
+        'sectorLimit',
     ];
 
     protected bool $hasColumnsChanged = false;
@@ -56,14 +56,16 @@ class Chart extends Model
         $data = $this->generateData();
         $data = $this->aggregateData($data);
         $data = $this->modifyDataByType($data);
-        // $data = $this->modifyDataByConfig($data);
 
         return array_values($data);
     }
 
     public function createConfig(array $attributes): array
     {
-        return Helpers::filterKeysInArray($attributes, $this->configKeys);
+        return [
+            'aggregationOption' => AggregationOption::Sum->value,
+            ...Helpers::filterKeysInArray($attributes, $this->configKeys)
+        ];
     }
 
     // Sort data by date and assumes date is in ISO format

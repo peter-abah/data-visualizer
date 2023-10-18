@@ -8,10 +8,11 @@ enum ChartType: string
     case BarChart = "bar_chart";
     case PieChart = "pie_chart";
     case RadarChart = "radar_chart";
+    case ScatterChart = "scatter_chart";
 
     public static function getCartesianTypes()
     {
-        return [self::BarChart->value, self::LineChart->value];
+        return [self::BarChart->value, self::LineChart->value, self::ScatterChart];
     }
 
     public function isCartesian()

@@ -1,12 +1,8 @@
 <x-app-layout>
     <div class="max-w-2xl">
         <h1 class="mb-6 text-xl font-bold">Create Chart</h1>
-        <form method="POST" action="{{ route('projects.charts.store', ['project' => $project]) }}"
-            x-data="{
-                columnsNo: 0,
-                columnLabels: @js($chartService->getColumnLabelsForChartType()),
-                chartType: @js(old('type')) || null,
-            }">
+        <form x-data="{ columnsNo: 0, showScaleTypeInput: false }" method="POST"
+            action="{{ route('projects.charts.store', ['project' => $project]) }}">
             @csrf
 
             <div class="mt-4">
@@ -20,7 +16,7 @@
             <div class="mt-4">
                 <x-input-label for="type" :value="__('Chart type*')" />
                 <select name="type" id="type" required
-                    x-on:change="chartType = $event.target.value">
+                    x-on:change="showScaleTypeInput = @js(\App\Enums\ChartType::getCartesianTypes()).includes($event.target.value)">
                     <option value="">{{ __('--Select an option--') }}</option>
                     @foreach (\App\Enums\ChartType::cases() as $type)
                         <option value="{{ $type->value }}" @selected($type->value === old('type'))>
@@ -31,9 +27,7 @@
             </div>
 
             <div class="mt-4" x-data="{ showTimeInfo: false }">
-                <x-input-label for="categoryColumn"
-                    x-text="columnLabels.category[chartType] ?? 'Category Column'">Category
-                    Column</x-input-label>
+                <x-input-label for="categoryColumn" :value="__('Category Column*')" />
 
                 <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
                     <select name="categoryColumn" id="categoryColumn" required>
@@ -44,8 +38,7 @@
                         @endforeach
                     </select>
 
-                    <div class="inline-flex flex-col" x-cloak
-                        x-show="@js(\App\Enums\ChartType::getCartesianTypes()).includes(chartType) && chartType !== @js(\App\Enums\ChartType::ScatterChart)">
+                    <div class="inline-flex flex-col" x-cloak x-show="showScaleTypeInput">
                         <div class="inline-flex items-center">
                             <x-input-label for="scaleType" :value="__('scale type')" class="mr-2 text-sm" />
                             <select name="scaleType" id="scaleType" required class="text-sm"

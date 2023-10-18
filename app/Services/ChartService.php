@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ChartType;
 use App\Http\Requests\StoreChartRequest;
 use App\Http\Requests\UpdateChartRequest;
 use App\Models\Chart;
@@ -69,5 +70,15 @@ class ChartService
         }
 
         return [true, null];
+    }
+
+    // Returns labels to be used in chart form based on chart type
+    public function getColumnLabelsForChartType()
+    {
+        return [
+            'category' => [
+                ChartType::ScatterChart->value => 'X Axis Column* (Ensure it is numeric)',
+            ],
+        ];
     }
 }

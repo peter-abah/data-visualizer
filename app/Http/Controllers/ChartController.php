@@ -33,6 +33,7 @@ class ChartController extends Controller
     {
         return view("charts.create", [
             'project' => $project,
+            'chartService' => $this->chartService,
         ]);
     }
 
