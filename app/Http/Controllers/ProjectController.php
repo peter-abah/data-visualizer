@@ -61,6 +61,12 @@ class ProjectController extends Controller
         return view('projects.show', ['project' => $project, 'chartIcons' => $chartIcons]);
     }
 
+    public function preview(Project $project): View
+    {
+        $this->authorize('view', $project);
+        return view('projects.preview', ['project' => $project, 'data' => $project->loadData(100)]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

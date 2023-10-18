@@ -5,10 +5,15 @@
                 {{ $project->name }}
             </h2>
 
-            <div class="flex justify-end gap-4">
+            <div class="flex flex-wrap gap-x-4 gap-y-2">
                 <a href={{ route('projects.charts.create', $project) }}
                     class="rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50">
                     Create chart
+                </a>
+
+                <a href={{ route('projects.preview', $project) }}
+                    class="rounded-md border px-4 py-2 text-sm font-medium hover:bg-slate-50">
+                    View data
                 </a>
 
                 <a href={{ route('projects.edit', $project) }}

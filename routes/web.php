@@ -25,7 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource("projects", ProjectController::class);
+    Route::get('/projects/{project}/preview', [ProjectController::class, 'preview'])->name('projects.preview');
     Route::get('/dashboard', [ProjectController::class, 'index'])->name('dashboard');
+
     Route::resource("projects.charts", ChartController::class)->shallow()->scoped()->except('update');
     Route::controller(ChartUpdateController::class)->group(function () {
         Route::put('/charts/{chart}', 'update')->name('charts.update');
