@@ -1,11 +1,7 @@
 // Use for blade template files
+import Alpine from "alpinejs";
 import "./bootstrap";
 
-import {
-    Livewire,
-    Alpine,
-} from "../../vendor/livewire/livewire/dist/livewire.esm";
-
-Livewire.start();
+Alpine.start;
 
 window.Alpine = Alpine;
