@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Data Visualizer'),
+    'name' => env('APP_NAME', 'PlotDat'),
 
     /*
     |--------------------------------------------------------------------------

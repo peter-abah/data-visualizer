@@ -1,7 +1,8 @@
 // Use for blade template files
-import Alpine from "alpinejs";
 import "./bootstrap";
 
-Alpine.start;
+import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
+
+Alpine.start();
