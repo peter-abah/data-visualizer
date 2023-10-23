@@ -1,5 +1,5 @@
 <x-layout>
-    <header class="flex items-center justify-between sticky top-0 bg-white px-8 py-4">
+    <header class="sticky top-0 flex items-center justify-between bg-white px-8 py-4">
         <h1 class="flex items-center px-4 text-3xl font-bold">
             <img src="logo.png" alt="PlotDat logo" class="w-8">
             <span>Plot</span><span class="text-red-700">Dat</span>
@@ -7,8 +7,8 @@
 
         <nav>
             <ul>
-                <li><a class="rounded-md border border-gray-800 px-6 py-2 font-bold hover:bg-black hover:text-white"
-                        href={{ route('register') }}>Get Started</a></li>
+                <li><a class="flex items-center gap-2 rounded-md border border-gray-800 px-6 py-2 font-bold hover:bg-black hover:text-white"
+                        href={{ route('register') }}>Get Started <x-icons.arrow-forward class="fill-current w-5" /></a></li>
             </ul>
         </nav>
     </header>
@@ -21,8 +21,10 @@
             business analyst, researcher, or just curious about your data, our intuitive tool makes
             visualization a breeze.
         </p>
-        <a class="mt-8 block rounded-md border border-gray-800 px-6 py-2 font-bold hover:bg-black hover:text-white"
-            href={{ route('register') }}>Get Started</a>
+        <a class="mt-8 flex items-center gap-2 rounded-md border border-gray-800 px-6 py-2 font-bold hover:bg-black hover:text-white"
+            href={{ route('register') }}>
+            Get Started <x-icons.arrow-forward class="fill-current w-5" />
+        </a>
     </section>
 
     <section class="grid grid-cols-[2fr_3fr] gap-12 px-20 py-16">
@@ -43,7 +45,7 @@
         </div>
     </section>
 
-    <section class="gap-12 px-20 pt-16 pb-20">
+    <section class="gap-12 px-20 pb-20 pt-16">
         <div class="w-3/5">
             <h2 class="mb-8 text-5xl font-bold">Export charts and share them</h2>
             <p class="mt-4 w-4/5 text-lg text-gray-600">
@@ -51,8 +53,8 @@
                 This gives you the flexibility to share your insights and collaborate with
                 others seamlessly.
             </p>
-            <a class="mt-8 inline-block rounded-md border border-gray-800 px-6 py-2 font-bold hover:bg-black hover:text-white"
-            href={{ route('register') }}>Get Started</a>
+            <a class="mt-8 inline-flex items-center gap-2 rounded-md border border-gray-800 px-6 py-2 font-bold hover:bg-black hover:text-white"
+                href={{ route('register') }}>Get Started <x-icons.arrow-forward class="fill-current w-5" /></a>
         </div>
     </section>
 
