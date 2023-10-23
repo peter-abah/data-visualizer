@@ -60,10 +60,11 @@
                     </div>
                 </div>
 
-                {{-- TODO: Add link explaining date formats --}}
                 <p x-show="showTimeInfo" x-cloak class="mt-2 text-sm">Category column for date/time
-                    charts should be in <strong>ISO format</strong>. Some components can
-                    be omited see: <strong>todo link here</strong></p>
+                    charts should be in <a href="https://en.wikipedia.org/wiki/ISO_8601"
+                        class="underline hover:no-underline"><strong>ISO 8601 format</strong></a>.
+                    Some components can be omited e.g <strong>YYYY, YYYY-MM, or YYYY-MM-DD</strong>
+                </p>
 
                 <x-input-error :messages="$errors->get('categoryColumn')" />
             </div>
