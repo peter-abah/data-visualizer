@@ -1,9 +1,9 @@
 <x-app-layout>
     <div class="max-w-2xl pb-8">
-        <div class="mb-6 flex items-start justify-between">
+        <div class="mb-6 flex items-center justify-between">
             <h1 class="text-2xl font-bold">Chart Settings</h1>
-            <a href={{ route('charts.show', ['chart' => $chart]) }}
-                class="block w-[10rem] shrink-0 truncate underline hover:no-underline">/{{ $chart->name }}</a>
+            <a href="{{ route('charts.show', $chart) }}"
+                class="flex items-center hover:underline"><x-icons.arrow-back /> Back</a>
         </div>
 
         <div class="mb-12">

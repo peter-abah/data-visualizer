@@ -1,6 +1,10 @@
 <x-app-layout>
     <div class="max-w-2xl">
-        <h1 class="mb-6 text-xl font-bold">Project Settings</h1>
+        <header class="flex mb-6  items-center justify-between gap-8">
+            <h1 class="text-xl font-bold">Project Settings</h1>
+            <a href="{{ route('projects.show', $project) }}"
+                class="flex items-center hover:underline"><x-icons.arrow-back /> Back</a>
+        </header>
         <form method="POST" action="{{ route('projects.update', $project) }}"
             enctype="multipart/form-data">
             @csrf
@@ -16,7 +20,7 @@
             <div class="mt-4">
                 <x-input-label for="description" :value="__('Description')" />
                 <textarea type="text" id="description"
-                    class="mt-1 h-48 sm:h-32 resize-none w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-indigo-600 dark:focus:ring-indigo-600"
+                    class="mt-1 h-48 w-full resize-none rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-indigo-600 dark:focus:ring-indigo-600 sm:h-32"
                     name="description">{{ old('description') ?? $project->description }}</textarea>
                 <x-input-error :messages="$errors->get('description')" />
             </div>
@@ -29,12 +33,10 @@
 
             <div class="mt-4 flex items-center justify-end">
                 <x-primary-button>{{ __('Update') }}</x-primary-button>
-                <a href="{{ route('projects.show', $project) }}"
-                    class="ml-4">{{ __('Cancel') }}</a>
             </div>
         </form>
 
-        <div class="mt-12 p-6 mb-8 border-t flex items-center justify-between">
+        <div class="mb-8 mt-12 flex items-center justify-between border-t py-6">
             <div class="w-9/12">
                 <strong>Delete Project</strong>
             </div>
