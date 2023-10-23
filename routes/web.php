@@ -17,20 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
- Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', function () {return view('home');});
 
 Route::middleware('auth')->group(function () {
-    // Route::redirect('/', '/dashboard');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource("projects", ProjectController::class);
-    Route::get('/projects/{project}/preview', [ProjectController::class, 'preview'])->name('projects.preview');
     Route::get('/dashboard', [ProjectController::class, 'index'])->name('dashboard');
+    Route::get('/projects/{project}/preview', [ProjectController::class, 'preview'])->name('projects.preview');
+    Route::get('/projects/{project}/getData', [ProjectController::class, 'getData'])->name('projects.getData');
 
     Route::resource("projects.charts", ChartController::class)->shallow()->scoped()->except('update');
     Route::controller(ChartUpdateController::class)->group(function () {

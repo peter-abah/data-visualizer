@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Services\ProjectService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -65,6 +66,12 @@ class ProjectController extends Controller
     {
         $this->authorize('view', $project);
         return view('projects.preview', ['project' => $project, 'data' => $project->loadData(100)]);
+    }
+
+    public function getData(Project $project)
+    {
+        $this->authorize('view', $project);
+        return Storage::download($project->file_path, "$project->name.csv", ['Content-Type: text/csv']);
     }
 
     /**
