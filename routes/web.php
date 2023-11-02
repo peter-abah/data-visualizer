@@ -17,7 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/', function () {return view('home');});
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect(route('dashboard'));
+    }
+    return view('home');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
