@@ -14,12 +14,13 @@ import {
 } from "chart.js";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 
-import { COLORS } from "../constants";
+import { COLORS, DARK_MODE_COLORS } from "../constants";
 import {
     getCartesianChartOptions,
     getGeneralChartOptions,
 } from "../chartOptions";
 import { merge } from "chart.js/helpers";
+import useTheme from "@/hooks/useTheme";
 
 ChartJS.register(
     CategoryScale,
@@ -37,7 +38,9 @@ type Props = {
 };
 
 export default function LineChart({ chart }: Props) {
+    const theme = useTheme();
     const { data, config } = chart;
+    const colors = theme === 'dark' ? DARK_MODE_COLORS : COLORS;
 
     return (
         <Line
@@ -46,8 +49,8 @@ export default function LineChart({ chart }: Props) {
                 datasets: config.dataColumns.map((dataColumn, i) => ({
                     label: dataColumn,
                     data: data.map((row) => row[dataColumn]),
-                    backgroundColor: COLORS[i],
-                    borderColor: COLORS[i],
+                    backgroundColor: colors[i],
+                    borderColor: colors[i],
                 })),
             }}
             options={getLineChartOptions(chart)}

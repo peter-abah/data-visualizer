@@ -3,7 +3,7 @@
         <div class="mb-6 flex items-center justify-between">
             <h1 class="text-2xl font-bold">Chart Settings</h1>
             <a href="{{ route('charts.show', $chart) }}"
-                class="flex items-center hover:underline"><x-icons.arrow-back /> Back</a>
+                class="flex items-center hover:underline"><x-icons.arrow-back class="fill-text" /> Back</a>
         </div>
 
         <div class="mb-12">
@@ -86,7 +86,7 @@
                             @foreach ($chart->config['dataColumns'] as $column)
                                 <li class="mt-4 flex items-center"
                                     x-show="!removedColumns['{{ $column }}']">
-                                    <p class="mr-4 w-fit border border-gray-500 px-3 py-2">
+                                    <p class="mr-4 w-fit border border-border px-3 py-2">
                                         {{ $column }}</p>
                                     <x-primary-button type="button" class="!p-2"
                                         x-on:click="removedColumns['{{ $column }}'] = !removedColumns['{{ $column }}']">
@@ -144,7 +144,7 @@
 
 
         <div class="mb-12">
-            <h2 class="border-b border-gray-400 pb-4 text-xl font-bold">Others</h2>
+            <h2 class="border-b border-border pb-4 text-xl font-bold">Others</h2>
 
             <form method="POST" class="mb-8"
                 action="{{ route('charts.updateConfig', ['chart' => $chart]) }}">
@@ -169,7 +169,7 @@
 
                 @if ($chart->type === \App\Enums\ChartType::PieChart)
                     <div class="mt-4 flex flex-wrap items-center gap-2">
-                        <x-input-label for="sectorLimit" class="text-black" :value="__('Sector limit for pie chart (leave blank for no limit)')" />
+                        <x-input-label for="sectorLimit" class="text-text" :value="__('Sector limit for pie chart (leave blank for no limit)')" />
                         <input id="sectorLimit" class="mt-1" type="number" name="sectorLimit"
                             value="{{ old('sectorLimit') ?? ($chart->config['sectorLimit'] ?? '') }}"
                             min="2" max="{{ count($chart->data) }}" />
@@ -240,11 +240,11 @@
                     @csrf
                     @method('delete')
 
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    <h2 class="text-lg font-medium">
                         {{ __('Are you sure you want to delete the chart?') }}
                     </h2>
 
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    <p class="mt-1 text-sm text-text-light">
                         {{ __('This action cannot be reversed') }}</p>
 
                     <div class="mt-6 flex justify-end">

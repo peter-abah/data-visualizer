@@ -8,8 +8,9 @@ import {
     ChartOptions,
 } from "chart.js";
 import { Chart as ChartType } from "@/types";
-import { COLORS } from "../constants";
+import { COLORS, DARK_MODE_COLORS } from "../constants";
 import { getGeneralChartOptions } from "../chartOptions";
+import useTheme from "@/hooks/useTheme";
 
 ChartJS.register(RadarController, RadialLinearScale, LineElement, PointElement);
 
@@ -17,7 +18,9 @@ type Props = {
     chart: ChartType;
 };
 export default function RadarChart({ chart }: Props) {
+    const theme = useTheme();
     const { data, config } = chart;
+    const colors = theme === 'dark' ? DARK_MODE_COLORS : COLORS;
 
     return (
         <Radar
@@ -26,8 +29,8 @@ export default function RadarChart({ chart }: Props) {
                 datasets: config.dataColumns.map((dataColumn, i) => ({
                     label: dataColumn,
                     data: data.map((row) => row[dataColumn]),
-                    backgroundColor: COLORS[i],
-                    borderColor: COLORS[i],
+                    backgroundColor: colors[i],
+                    borderColor: colors[i],
                 })),
             }}
             options={getRadarChartOptions(chart)}

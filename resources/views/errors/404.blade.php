@@ -17,13 +17,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
+<body class="font-sans text-text antialiased">
     <div
         class="flex min-h-screen flex-col items-center pt-6 justify-center sm:pt-0">
         <div class="grid place-items-center">
             <h1 class="text-8xl font-bold mb-6">404.</h1>
             <p></p>
-            <a class="text-xl px-8 py-2 bg-black text-white" href="/">Back to home</a>
+            <a class="text-xl px-8 py-2 bg-bg-inverse text-text-inverse" href="/">Back to home</a>
         </div>
     </div>
 </body>

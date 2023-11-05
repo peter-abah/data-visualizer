@@ -1,5 +1,6 @@
 // Used for loading inertia
 import "./bootstrap";
+import './darkMode';
 
 import { createInertiaApp } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";

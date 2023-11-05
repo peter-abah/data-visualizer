@@ -37,7 +37,7 @@ export default function Dropdown({ trigger, children, contentClasses }: Props) {
                 onClick={() => setOpen(false)}
             >
                 <div
-                    className={`rounded-md ring-1 ring-black ring-opacity-5 bg-white z-50 ${contentClasses}`}
+                    className={`rounded-md ring-1 ring-bg ring-opacity-5 bg-bg z-50 ${contentClasses}`}
                 >
                     {children}
                 </div>
@@ -54,7 +54,7 @@ export const DropdownButton = ({
         <button
             {...restProps}
             className={clsx(
-                "block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out",
+                "block w-full text-left px-4 py-2 text-sm hover:bg-bg-hover focus:outline-none focus:bg-bg-hover transition duration-150 ease-in-out",
                 className
             )}
         />

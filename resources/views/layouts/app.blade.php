@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ request()->cookie('theme') ?? 'system' }}">
 
 <head>
     <meta charset="utf-8">
@@ -10,7 +10,8 @@
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap"
+        rel="stylesheet" />
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -21,7 +22,7 @@
         @include('layouts.navigation')
 
         <!-- Page Content -->
-        <main class="p-6 sm:py-6 sm:px-12 ">
+        <main class="p-6 sm:px-12 sm:py-6">
             {{ $slot }}
         </main>
     </div>

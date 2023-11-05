@@ -2,4 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-[x-cloak] { display: none !important; }
+[x-cloak] {
+    display: none !important;
+}
+
+@layer base {
+    :root,
+    .light {
+        --color-bg: 255 255 255;
+        --color-bg-inverse: 0 0 0;
+        --color-bg-hover: 249 250 251;
+        --color-bg-btn: 31 41 55;
+        --color-bg-btn-danger: 220 38 38;
+        --color-bg-modal-overlay: 107 114 128;
+        --color-text: 17 24 39;
+        --color-text-inverse: 255 255 255;
+        --color-text-light: 107 114 128;
+        --color--text-link: 75 85 99;
+        --color-text-error: 220 38 38;
+        --color-border: 229 231 235;
+        --color-border-input: 156 163 175;
+    }
+
+    .dark {
+        --color-bg: 23 23 23;
+        --color-bg-inverse: 255 255 255;
+        --color-bg-hover: 38 38 38;
+        --color-bg-btn: 245 245 245;
+        --color-bg-btn-danger: 220 38 38;
+        --color-bg-modal-overlay: 107 114 128;
+        --color-text: 243 245 246;
+        --color-text-inverse: 17 24 39;
+        --color-text-light: 209 213 219;
+        --color--text-link: 209 213 219;
+        --color-text-error: 220 38 38;
+        --color-border: 68 68 68;
+        --color-border-input: 68 68 68;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .system {
+            --color-bg: 23 23 23;
+            --color-bg-inverse: 255 255 255;
+            --color-bg-hover: 38 38 38;
+            --color-bg-btn: 245 245 245;
+            --color-bg-btn-danger: 220 38 38;
+            --color-bg-modal-overlay: 107 114 128;
+            --color-text: 243 245 246;
+            --color-text-inverse: 17 24 39;
+            --color-text-light: 209 213 219;
+            --color--text-link: 209 213 219;
+            --color-text-error: 220 38 38;
+            --color-border: 68 68 68;
+            --color-border-input: 68 68 68;
+        }
+    }
+
+    body {
+        color: rgb(var(--color-text));
+        background-color: rgb(var(--color-bg));
+    }
+
+    [type="text"],
+    input:where(:not([type])),
+    [type="email"],
+    [type="url"],
+    [type="password"],
+    [type="number"],
+    [type="date"],
+    [type="datetime-local"],
+    [type="month"],
+    [type="search"],
+    [type="tel"],
+    [type="time"],
+    [type="week"],
+    [multiple],
+    textarea,
+    select {
+        color: currentColor;
+        background-color: rgb(var(--color-bg));
+    }
+}

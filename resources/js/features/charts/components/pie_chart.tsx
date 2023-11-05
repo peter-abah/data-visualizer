@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Chart as ChartType } from "@/types";
 import {
     Chart as ChartJS,
@@ -8,8 +8,10 @@ import {
     ChartOptions,
 } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { COLORS } from "../constants";
+import { COLORS, DARK_MODE_COLORS } from "../constants";
 import { getGeneralChartOptions } from "../chartOptions";
+import { useDarkMode } from "usehooks-ts";
+import useTheme from "@/hooks/useTheme";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -19,6 +21,7 @@ type Props = {
 
 export default function PieChart({ chart }: Props) {
     let { data, config } = chart;
+    const theme = useTheme();
 
     data = useMemo(() => {
         const sectorLimit = +config.sectorLimit;
@@ -26,7 +29,7 @@ export default function PieChart({ chart }: Props) {
 
         for (let i = sectorLimit; i < data.length; i++) {
             for (let column of config.dataColumns) {
-                data[sectorLimit - 1][column] += data[i][column];
+                data[sectorLimit - 1][column] += +data[i][column];
             }
         }
 
@@ -42,6 +45,8 @@ export default function PieChart({ chart }: Props) {
         [data, config]
     );
 
+    const colors = theme === 'dark' ? DARK_MODE_COLORS : COLORS;
+
     return (
         <Pie
             data={{
@@ -52,8 +57,8 @@ export default function PieChart({ chart }: Props) {
                         data: data.map((row) =>
                             Number(row[config.dataColumns[0]])
                         ),
-                        backgroundColor: COLORS,
-                        borderColor: COLORS,
+                        backgroundColor: colors,
+                        borderColor: colors,
                     },
                 ],
             }}

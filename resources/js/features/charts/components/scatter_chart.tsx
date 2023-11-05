@@ -11,12 +11,13 @@ import {
 } from "chart.js";
 import "chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm";
 
-import { COLORS } from "../constants";
+import { COLORS, DARK_MODE_COLORS } from "../constants";
 import {
     getCartesianChartOptions,
     getGeneralChartOptions,
 } from "../chartOptions";
 import { merge } from "chart.js/helpers";
+import useTheme from "@/hooks/useTheme";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
@@ -25,7 +26,9 @@ type Props = {
 };
 
 export default function ScatterChart({ chart }: Props) {
+    const theme = useTheme();
     const { data, config } = chart;
+    const colors = theme === 'dark' ? DARK_MODE_COLORS : COLORS;
 
     return (
         <Scatter
@@ -36,8 +39,8 @@ export default function ScatterChart({ chart }: Props) {
                         x: row[config.categoryColumn],
                         y: row[dataColumn],
                     })),
-                    backgroundColor: COLORS[i],
-                    borderColor: COLORS[i],
+                    backgroundColor: colors[i],
+                    borderColor: colors[i],
                 })),
             }}
             options={getScatterChartOptions(chart)}

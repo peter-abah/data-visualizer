@@ -8,12 +8,13 @@ import {
     Legend,
     ChartOptions,
 } from "chart.js";
-import { COLORS } from "../constants";
+import { COLORS, DARK_MODE_COLORS } from "../constants";
 import {
     getCartesianChartOptions,
     getGeneralChartOptions,
 } from "../chartOptions";
 import { merge } from "chart.js/helpers";
+import useTheme from "@/hooks/useTheme";
 
 ChartJS.register(CategoryScale, BarElement, Tooltip, Legend);
 
@@ -21,7 +22,10 @@ type Props = {
     chart: ChartType;
 };
 export default function BarChart({ chart }: Props) {
+    const theme = useTheme();
     const { data, config } = chart;
+    const colors = theme === 'dark' ? DARK_MODE_COLORS : COLORS;
+
 
     return (
         <Bar
@@ -30,8 +34,8 @@ export default function BarChart({ chart }: Props) {
                 datasets: config.dataColumns.map((dataColumn, i) => ({
                     label: dataColumn,
                     data: data.map((row) => row[dataColumn]),
-                    backgroundColor: COLORS[i],
-                    borderColor: COLORS[i],
+                    backgroundColor: colors[i],
+                    borderColor: colors[i],
                 })),
             }}
             options={getBarChartOptions(chart)}

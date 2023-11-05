@@ -3,7 +3,7 @@
         <header class="flex mb-6  items-center justify-between gap-8">
             <h1 class="text-xl font-bold">Project Settings</h1>
             <a href="{{ route('projects.show', $project) }}"
-                class="flex items-center hover:underline"><x-icons.arrow-back /> Back</a>
+                class="flex items-center hover:underline"><x-icons.arrow-back class="fill-text" /> Back</a>
         </header>
         <form method="POST" action="{{ route('projects.update', $project) }}"
             enctype="multipart/form-data">
@@ -20,7 +20,7 @@
             <div class="mt-4">
                 <x-input-label for="description" :value="__('Description')" />
                 <textarea type="text" id="description"
-                    class="mt-1 h-48 w-full resize-none rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-indigo-600 dark:focus:ring-indigo-600 sm:h-32"
+                    class="mt-1 h-48 w-full resize-none rounded-md border-border-input shadow-sm focus:border-indigo-500 focus:ring-indigo-500      sm:h-32"
                     name="description">{{ old('description') ?? $project->description }}</textarea>
                 <x-input-error :messages="$errors->get('description')" />
             </div>
@@ -50,11 +50,11 @@
                     @csrf
                     @method('delete')
 
-                    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    <h2 class="text-lg font-medium text-text ">
                         {{ __('Are you sure you want to delete the project?') }}
                     </h2>
 
-                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                    <p class="mt-1 text-sm text-text-light">
                         {{ __('This will also delete all charts belonging to the project.') }}
                     </p>
 

@@ -17,7 +17,7 @@ const ChartToExport: TChartToExport = forwardRef(
         return (
             <div className="fixed left-[9999px]">
                 <div
-                    className="bg-white p-8 w-[1024px] mx-auto print:py-16"
+                    className="bg-bg p-8 w-[1024px] mx-auto print:py-16"
                     id="chart-to-export"
                     ref={ref}
                 >

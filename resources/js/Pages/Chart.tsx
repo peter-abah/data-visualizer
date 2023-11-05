@@ -1,9 +1,9 @@
+import { useRef } from "react";
 import { Chart as ChartType } from "@/types";
 import { useToJpeg } from "@hugocxl/react-to-image";
 import { useReactToPrint } from "react-to-print";
 import { chartTypeToComponent } from "@/features/charts/components";
 import ChartToExport from "@/features/charts/components/chart_to_export";
-import { useRef } from "react";
 import Dropdown, { DropdownButton } from "@/components/dropdown";
 
 type Props = {
@@ -34,7 +34,7 @@ export default function Chart({ chart, linkToProject, linkToSettings }: Props) {
         <div className="overflow-x-hidden">
             <header className="mb-8 flex flex-wrap justify-between gap-4 items-start">
                 <div>
-                    <h1 className="font-bold tracking-tight text-3xl text-gray-800">
+                    <h1 className="font-bold tracking-tight text-3xl">
                         {chart.name}
                     </h1>
                     <p>
@@ -51,7 +51,7 @@ export default function Chart({ chart, linkToProject, linkToSettings }: Props) {
                 <div className="flex gap-2">
                     <Dropdown
                         trigger={
-                            <button className="ml-auto px-4 py-2 rounded-md text-sm font-medium border whitespace-nowrap hover:bg-slate-50">
+                            <button className="ml-auto px-4 py-2 rounded-md text-sm font-medium border whitespace-nowrap hover:bg-bg-hover">
                                 Export chart
                             </button>
                         }
@@ -66,7 +66,7 @@ export default function Chart({ chart, linkToProject, linkToSettings }: Props) {
 
                     <a
                         href={linkToSettings}
-                        className="px-4 py-2 rounded-md text-sm font-medium border hover:bg-slate-50"
+                        className="px-4 py-2 rounded-md text-sm font-medium border hover:bg-bg-hover"
                     >
                         Settings
                     </a>
