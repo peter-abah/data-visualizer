@@ -14,12 +14,12 @@ export function updateTheme(theme) {
     if (theme === "system") {
         localStorage.removeItem("theme");
         // Delete cookie
-        document.cookie = "theme=; Max-Age=0";
+        document.cookie = "theme=; Max-Age=0; path=/";
         theme = getSystemPreferenceForTheme();
     } else {
         localStorage.theme = theme;
         // Save theme in cookie to persist theme change and prevent FOUC
-        document.cookie = `theme=${theme}; max-age=31536000`;
+        document.cookie = `theme=${theme}; max-age=31536000; path=/`;
     }
 
     updateThemeInHTML(theme);

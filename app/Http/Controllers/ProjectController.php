@@ -88,7 +88,7 @@ class ProjectController extends Controller
     public function update(UpdateRequest $request, Project $project)
     {
         $project = $this->projectService->updateProject($request);
-        return view('projects.show', ['project' => $project]);
+        return redirect(route('projects.show', $project));
     }
 
     /**

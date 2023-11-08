@@ -10,7 +10,6 @@ import {
 import { Pie } from "react-chartjs-2";
 import { COLORS, DARK_MODE_COLORS } from "../constants";
 import { getGeneralChartOptions } from "../chartOptions";
-import { useDarkMode } from "usehooks-ts";
 import useTheme from "@/hooks/useTheme";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -19,12 +18,14 @@ type Props = {
     chart: ChartType;
 };
 
+const DEFAULT_SECTOR_LIMIT = 6;
 export default function PieChart({ chart }: Props) {
-    let { data, config } = chart;
     const theme = useTheme();
 
+    let { data, config } = chart;
+    const sectorLimit = config.sectorLimit ? Number(config.sectorLimit): DEFAULT_SECTOR_LIMIT;
+
     data = useMemo(() => {
-        const sectorLimit = +config.sectorLimit;
         if (data.length <= sectorLimit) return data;
 
         for (let i = sectorLimit; i < data.length; i++) {
@@ -32,7 +33,7 @@ export default function PieChart({ chart }: Props) {
                 data[sectorLimit - 1][column] += +data[i][column];
             }
         }
-
+        console.log(chart  )
         data[sectorLimit - 1][config.categoryColumn] = "Others";
         return data.slice(0, sectorLimit);
     }, [data, config]);
@@ -41,7 +42,7 @@ export default function PieChart({ chart }: Props) {
         () =>
             data
                 .map((row) => row[config.categoryColumn])
-                .slice(0, +config.sectorLimit),
+                .slice(0, sectorLimit),
         [data, config]
     );
 

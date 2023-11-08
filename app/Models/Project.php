@@ -50,7 +50,9 @@ class Project extends Model
         // Delete charts and data file on delete
         static::deleting(function (Project $project) {
             Storage::delete($project->file_path);
-            $project->charts()->delete();
+            foreach ($project->charts as $chart) {
+                $chart->delete();
+            };
         });
     }
 }

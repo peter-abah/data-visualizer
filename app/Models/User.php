@@ -44,12 +44,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function projects() : HasMany
+    public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
     }
 
-    public function charts() : HasMany
+    public function charts(): HasMany
     {
         return $this->hasMany(Chart::class);
     }
@@ -58,7 +58,9 @@ class User extends Authenticatable
     {
         // Delete projects on delete
         static::deleting(function (User $user) {
-            $user->projects()->delete();
+            foreach ($user->projects as $project) {
+                $project->delete();
+            }
         });
     }
 }
