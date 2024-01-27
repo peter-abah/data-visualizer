@@ -28,6 +28,8 @@ Make sure these are installed on your system:
 
 
 ### Install
+- Enable `zip` php extension for composer to work
+- Enable `pdo_pgsql` and `pgsql` php extensions to allow php work with posgresql database
 - Make sure these [PHP extensions](https://laravel.com/docs/10.x/deployment#server-requirements) are enabled for laravel to work.
 
 - Run this command to clone the repository
